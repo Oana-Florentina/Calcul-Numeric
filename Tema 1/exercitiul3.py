@@ -77,7 +77,9 @@ def best_functions():
 
 
 best_functions()
-print(frequency)
 hierarchy = sorted(frequency, key=frequency.get, reverse=True)
-print(hierarchy[:3])
+print(hierarchy)
 # pt fiecare x, aplic t4..6, calculez eroarea pt fiecare si returnez top3
+
+
+#--------bonusss--------
