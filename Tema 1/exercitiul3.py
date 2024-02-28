@@ -17,7 +17,7 @@ def T_6(a):
 
 def T_8(a):
     return (2027025 * a - 270270 * (a ** 3) + 6930 * (a ** 5) - 36 * (a ** 7)) / (
-                2027025 - 945945 * (a ** 2) + 51975 * (a ** 4) - 630 * (a ** 6) + a * 8)
+            2027025 - 945945 * (a ** 2) + 51975 * (a ** 4) - 630 * (a ** 6) + a * 8)
 
 
 def T_1(a):
@@ -49,23 +49,35 @@ def error_function(T_x, a):
 
 list_of_functions = [T_4, T_5, T_6, T_7, T_8, T_9]
 
+frequency = {"T_4": 0,
+             "T_5": 0,
+             "T_6": 0,
+             "T_7": 0,
+             "T_8": 0,
+             "T_9": 0
+              }
+
 
 def best_functions():
-    pq = PriorityQueue()
     lower_bound = -math.pi / 2
     upper_bound = math.pi / 2
     for _ in range(1000):
+        pq = PriorityQueue()
         random_number = random.uniform(lower_bound, upper_bound)
         for function in list_of_functions:
             pq.put((error_function(function, random_number), f"{function.__name__}"))
             if pq.qsize() > 3:
                 pq.get()
 
-        print("-----------------")
+        # print("-----------------")
         while not pq.empty():
             priority, item = pq.get()
-            print(f'Priority: {priority}, Item: {item}')
+            global frequency
+            frequency[item] += priority
 
 
 best_functions()
+print(frequency)
+hierarchy = sorted(frequency, key=frequency.get, reverse=True)
+print(hierarchy[:3])
 # pt fiecare x, aplic t4..6, calculez eroarea pt fiecare si returnez top3
