@@ -135,22 +135,27 @@ def verify_euclidian_norm(A_init, x, b_init):
 
 
 def solve_equation(A_init, b_init, x):
-    x = np.array(x)
+    A = np.array(A_init)
+
+    x_ = np.array(x)
     print("x:", x)
 
-    x_lib = np.linalg.solve(A_init, b_init)
+    b = np.array(b_init)
+    print("b_init:", b_init)
+
+    x_lib = np.linalg.solve(A, b)
     print("x_lib:", x_lib)
 
-    norm_1 = np.linalg.norm((x - x_lib), ord=2)
+    norm_1 = np.linalg.norm((x_ - x_lib), ord=2)
     print("||x - x_lib||_2:", norm_1)
 
     A_inverse = np.linalg.inv(A)
     print_matrix(A_inverse, "A_inverse")
 
-    A_inverse_b_init = A_inverse.dot(b_init)
-    print("A_inverse_b_init:", A_inverse_b_init)
+    x_new = A_inverse.dot(b)
+    print("x_new:", x_new)
 
-    norm_2 = np.linalg.norm((x - A_inverse_b_init), ord=2)
+    norm_2 = np.linalg.norm((x_ - x_new), ord=2)
     print("||x - A_inverse * b_init||_2:", norm_2)
 
 
