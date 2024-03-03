@@ -3,11 +3,11 @@ from decimal import Decimal, getcontext
 
 
 def verify_operation_plus():
-    getcontext().prec = 500
-    x = Decimal('1.0')
-    u = Decimal(find_u())
-    y = u / Decimal('10')
-    z = u / Decimal('10')
+
+    x = 1.0
+    u = find_u()
+    y = u / 10
+    z = u / 10
     result1 = (x + y) + z
     result2 = x + (y + z)
     print("Rezultatul 1:", result1)
