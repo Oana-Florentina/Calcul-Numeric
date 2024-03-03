@@ -37,7 +37,7 @@ def is_not_diagonal(A):
     n = len(A)
     for i in range(n):
         for j in range(n):
-            if i != j and abs(A[i][j]) > epsilon: 
+            if i != j and abs(A[i][j]) > epsilon:
                 return True
     return False
 
@@ -45,6 +45,7 @@ def jacobi(A):
     k = 0
     U = np.identity(len(A))
     n = len(A)
+    k_max = 1000
     while k < k_max and is_not_diagonal(A):
         p, q = calculate_p_q(A)
         c, s, t = calculate_c_s_t(A, p, q)
@@ -71,15 +72,28 @@ def generate_symmetric_matrix(n):
             A[j][i] = A[i][j]
     return A
 
-def main():
-    global k_max
-    n = 5
-    k_max = 1000
-    A_init = generate_symmetric_matrix(n)
+def matrix_norm(matrix):
+    return np.linalg.norm(matrix, ord='fro')
 
-    print("Initial A:", A_init)
-    A_final, U = jacobi(A_init)
-    print("Matricea finală A_final:", A_final)
+def print_matrix(A):
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            print(A[i][j], end=" ")
+        print()
+def main():
+
+    n = 5
+    epsilon = 10 ** (-9)
+    A = generate_symmetric_matrix(n)
+    A_init = np.copy(A)
+    A, U = jacobi(A)
+    # Formarea matricei diagonale Λ din valorile proprii aproximative
+    eigenvalues = np.diag(A)
+
+    # Verificarea A_init * U ≈ U * Λ prin calcularea normei matriceale a diferenței
+    norm_difference = matrix_norm(np.dot(A_init, U) - np.dot(U, np.diag(eigenvalues)))
+    print("Norma matriceală a diferenței între A_init * U și U * Λ:", norm_difference)
+
 
 if __name__ == "__main__":
     main()
