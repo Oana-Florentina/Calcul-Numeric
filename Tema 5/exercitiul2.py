@@ -57,3 +57,5 @@ def is_positive_definite(A):
 
 if __name__ == "__main__":
     main()
+
+# matricea este simetrica, diagonala, pozitiv definita

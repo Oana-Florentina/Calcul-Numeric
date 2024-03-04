@@ -10,8 +10,8 @@ def calculate_singular_values(A):
 
 def calculate_rank(A):
     singular_values = calculate_singular_values(A)
-    rank_A = np.sum(singular_values > 1e-10)  # Consideram valorile singulare nenule
-    return rank_A
+    rank_A = singular_values[singular_values > 1e-10]  # Consideram valorile singulare nenule
+    return len(rank_A)
 
 def calculate_condition_number(A):
     singular_values = calculate_singular_values(A)
@@ -21,7 +21,6 @@ def calculate_condition_number(A):
     return condition_number
 
 def calculate_moore_penrose_pseudoinverse(A):
-    U, S, VT = calculate_svd(A)
     pseudo_inverse = np.linalg.pinv(A)
     return pseudo_inverse
 
@@ -39,7 +38,8 @@ def main():
                   [2, 5, 6.5],
                   [1, 0, 2],
                   [1, 1, 3]])
-
+    print("A:", A)
+    print()
     singular_values = calculate_singular_values(A)
     print("Valorile singulare ale matricei A:", singular_values)
 
