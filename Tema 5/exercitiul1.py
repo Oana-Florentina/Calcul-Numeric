@@ -86,7 +86,17 @@ def main():
     epsilon = 10 ** (-9)
     A = generate_symmetric_matrix(n)
     A_init = np.copy(A)
+    print("A_init:")
+    print_matrix(A_init)
     A, U = jacobi(A)
+    print("A:")
+    print_matrix(A)
+    print("U:")
+    print_matrix(U)
+    A_final = np.dot(np.dot(U.T, A_init), U)
+    print("A_Final:")
+    print_matrix(A_final)
+
     # Formarea matricei diagonale Λ din valorile proprii aproximative
     eigenvalues = np.diag(A)
 
