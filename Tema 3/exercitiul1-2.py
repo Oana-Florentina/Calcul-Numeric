@@ -99,8 +99,10 @@ def main():
     n = 3
     s = generate_vector_s(n)
     A = generate_matrix(n)
+    A_init = np.copy(A)
     print("A:")
     print_matrix(A)
+    print()
     print("s:", s)
     print()
     b = calculate_vector(A, n, s)
@@ -118,10 +120,11 @@ def main():
     print()
 
     X_house = solve_system(R, n, b)
-    x_QR = find_x_qr_with_lib(A, n, b)
+    x_QR = find_x_qr_with_lib(A_init, n, b)
 
     print("norma:", calculate_norm(x_QR, X_house))
-
+    print("X_house:", X_house)
+    print("x_QR:", x_QR)
     print()
 
 if __name__ == "__main__":
