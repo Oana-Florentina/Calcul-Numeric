@@ -31,7 +31,7 @@ def QR(A, n, b):
         for i in range(r, n):
             s += A[i][r] ** 2
         if s < epsilon:
-            continue
+            break
         k = math.sqrt(s)
         if A[r][r] > 0:
             k = -k
@@ -39,7 +39,7 @@ def QR(A, n, b):
         u[r] = A[r][r] - k
         for i in range(r+1, n):
             u[i] = A[i][r]
-        for j in range(r, n):
+        for j in range(r+1, n):
             s = 0
             for i in range(r, n):
                 s += u[i] * A[i][j]
@@ -48,22 +48,23 @@ def QR(A, n, b):
                 A[i][j] -= gamma * u[i]
         for i in range(r+1, n):
             A[i][r] = 0
-        for i in range(r, n):
+        A[r][r] = k
+        for j in range(0, n):
             s = 0
-            for j in range(r, n):
-                s += Q[i][j] * u[j]
+            for i in range(r, n):
+                s += Q[i][j] * u[i]
             gamma = s / beta
-            for j in range(r, n):
-                Q[i][j] -= gamma * u[j]
+            for i in range(r, n):
+                Q[i][j] -= gamma * u[i]
+        s = 0
+        for j in range(r, n):
+            s += b[j] * u[j]
+        gamma = s / beta
         for i in range(r, n):
-            s = 0
-            for j in range(n):
-                s += b[j] * u[j]
-            gamma = s / beta
-            b[i] -= gamma * u[i]
+                b[i] -= gamma * u[i]
 
     R = A
-    return Q, R, b
+    return Q.T, R, b
 
 
 def print_matrix(A):
@@ -117,10 +118,10 @@ def qr_decomposition(A):
 
 def main():
     n = 3
-    s = [3, 2, 1]
-    A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
-   # s = generate_vector_s(n)
-   # A = generate_matrix(n)
+   # s = [3, 2, 1]
+   # A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
+    s = generate_vector_s(n)
+    A = generate_matrix(n)
     A_init = np.copy(A)
     A_init = np.array(A_init, dtype=np.float32)
     print("A:")
