@@ -107,6 +107,21 @@ def calculate_second_norm(A_init, X_house, b_init):
 def calculate_third_norm(X_house, s):
     return np.linalg.norm(X_house - s)/np.linalg.norm(s)
 
+
+def inverse_with_qr(Q, R):
+    n = Q.shape[0]
+    inverse = np.zeros((n, n))
+
+    for i in range(n):
+        e = np.zeros(n)
+        e[i] = 1
+        y = np.dot(Q.T, e)
+        x = solve_system(R, n, y)
+        inverse[:, i] = x
+        print("x:", x)
+
+    return inverse
+
 def qr_decomposition(A):
     Q, R = np.linalg.qr(A)
     return Q, R
@@ -114,33 +129,41 @@ def qr_decomposition(A):
 
 def main():
     n = 3
-    #s = [3, 2, 1]
-    #A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
+    s = [3, 2, 1]
+    A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
     s = generate_vector_s(n)
     A = generate_matrix(n)
     A_init = np.copy(A)
     A_init = np.array(A_init, dtype=np.float32)
+    print("--------ex1----------")
+    print()
     print("A:")
     print_matrix(A)
     print()
     print("s:", s)
-    print()
     b = calculate_vector(A, n, s)
     b_init = np.copy(b)
     print("b:", b)
-    print("------------------")
+
+    print()
+    print("--------ex5----------")
     print()
 
     Q, R, b = QR(A, n, b)
-
+    inverse_qr=inverse_with_qr(Q, R)
+    inverse_library = np.linalg.inv(A)
+    difference = np.linalg.norm(inverse_qr - inverse_library)
+    print("Norma diferenței dintre inversa calculată cu QR și inversa din bibliotecă:", difference)
     print()
-
+    print("--------ex2----------")
+    print()
     print("Q:")
     print_matrix(Q)
     print("R:")
     print_matrix(R)
-    print("------------------")
-
+    print()
+    print("--------ex3----------")
+    print()
     X_house = solve_system(R, n, np.dot(Q.T, b_init))
 
     x_QR = find_x_qr_with_lib(A_init, n, b_init)
@@ -149,7 +172,7 @@ def main():
     print("norma:", calculate_norm(x_QR, X_house))
 
     print()
-    print("------------------")
+    print("--------ex4----------")
     print()
 
     print("norm between A_init * X_house and b_init:", calculate_second_norm(A_init, X_house, b_init))
