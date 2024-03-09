@@ -100,16 +100,12 @@ def find_x_qr_with_lib(A, n, b):
 
 
 def calculate_second_norm(A_init, X_house, b_init):
-    print("b_init:", b_init)
-    print("A_init:", A_init)
-    print("X_house:", X_house)
     A_init_x_house = np.dot(A_init, X_house)
-    print("A_init_x_house:", A_init_x_house)
+    return np.linalg.norm(A_init_x_house - b_init)
 
-    norm = np.linalg.norm(A_init_x_house - b_init)
-    print("Norm between A_init*X_house and b_init:", norm)
-    print("------------------")
 
+def calculate_third_norm(X_house, s):
+    return np.linalg.norm(X_house - s)/np.linalg.norm(s)
 
 def qr_decomposition(A):
     Q, R = np.linalg.qr(A)
@@ -118,8 +114,8 @@ def qr_decomposition(A):
 
 def main():
     n = 3
-   # s = [3, 2, 1]
-   # A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
+    #s = [3, 2, 1]
+    #A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
     s = generate_vector_s(n)
     A = generate_matrix(n)
     A_init = np.copy(A)
@@ -137,13 +133,8 @@ def main():
 
     Q, R, b = QR(A, n, b)
 
-    print("Q:")
-    print_matrix(Q)
-    print("R:")
-    print_matrix(R)
-    print("------------------")
     print()
-    # Q, R = qr_decomposition(A_init)
+
     print("Q:")
     print_matrix(Q)
     print("R:")
@@ -153,20 +144,20 @@ def main():
     X_house = solve_system(R, n, np.dot(Q.T, b_init))
 
     x_QR = find_x_qr_with_lib(A_init, n, b_init)
-
-    print("norma:", calculate_norm(x_QR, X_house))
-    print("X_house:", X_house)
-    print("s: ", s)
     print("x_QR:", x_QR)
+    print("X_house:", X_house)
+    print("norma:", calculate_norm(x_QR, X_house))
+
     print()
     print("------------------")
     print()
-    print("X_house:", X_house)
 
-    calculate_second_norm(A_init, X_house, b_init)
+    print("norm between A_init * X_house and b_init:", calculate_second_norm(A_init, X_house, b_init))
+    print("norm between A_init * x_QR and b_init:", calculate_second_norm(A_init, x_QR, b_init))
+    print("norm between X_house and s:", calculate_third_norm(X_house, s))
+    print("norm between x_QR and s:", calculate_third_norm(x_QR, s))
 
-    print("x_QR:", x_QR)
-    print("A_init:", A_init)
+
 
 
 if __name__ == "__main__":
