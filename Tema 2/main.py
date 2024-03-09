@@ -159,6 +159,32 @@ def solve_equation(A_init, b_init, x):
     print("||x - A_inverse * b_init||_2:", norm_2)
 
 
+def index(i, j):
+    return i * (i + 1) // 2 + j
+
+
+def LU_decomposition_2(A_init, n):
+    # l_11, l_21, l_22, l_31, l_32, l_33
+    # 1, u_12, u_13, 1, u_23, 1
+    L = [1 for _ in range(0, n * (n + 1) // 2)]
+    U = [1 for _ in range(0, n * (n + 1) // 2)]
+
+    for p in range(1, n + 1):
+        for i in range(p, n + 1):
+            sum_ = sum(L[index(i - 1, k - 1)] * U[index(k - 1, p - 1)] for k in range(1, p))
+            L[index(i - 1, p - 1)] = A_init[i - 1][p - 1] - sum_
+
+        if abs(L[index(p - 1, p - 1)]) < epsilon:
+            print("Matrix cannot be decomposed")
+            return "Matrix cannot be decomposed"
+
+        for i in range(p + 1, n + 1):
+            sum_ = sum(L[index(p - 1, k - 1)] * U[index(k - 1, i - 1)] for k in range(1, p))
+            U[index(p - 1, i - 1)] = (A_init[p - 1][i - 1] - sum_) / L[index(p - 1, p - 1)]
+
+    return L, U
+
+
 if __name__ == "__main__":
     # A_init = [[2, 0, 2],
     #           [1, 2, 5],
@@ -187,3 +213,9 @@ if __name__ == "__main__":
     verify_euclidian_norm(A_init, x, b)
 
     solve_equation(A_init, b, x)
+
+    print_matrix(A, "L")
+    print_matrix(A, "U")
+    L, U = LU_decomposition_2(A_init, n)
+    print("L:", L)
+    print("U:", U)
