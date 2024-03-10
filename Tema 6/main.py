@@ -68,16 +68,16 @@ if __name__ == "__main__":
     print("L_n(x) =", result)
     print("|L_x- f(x)| =", abs(result - function_1(x)))
 
-    a = 1
+    a = 0
     b = 5
-    n = 4
-    m = 4
-    x_ = 3
+    n = 5
+    m = 5
+    x_ = 1.5
     h = (b - a) / n
     x = [a + i * h for i in range(n + 1)]
     y = [function_1(x[i]) for i in range(n + 1)]
     c = least_squares_method(n, m, x_, x, y)
-    horner_method(c, x_)
+    result = horner_method(c, x_)
 
     print("With Horner P(x)= ", result)
 
