@@ -2,6 +2,8 @@ from random import random
 
 import numpy as np
 epsilon = 10**(-5)
+
+
 # Muller
 def choose_x1_x2_x3():
     return random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10)
