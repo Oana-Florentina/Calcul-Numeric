@@ -19,7 +19,7 @@ def extract_data(file_path):
                 num_1 = float(matches.group(1))  # elementul
                 num_2 = int(matches.group(2))  # linia
                 num_3 = int(matches.group(3))  # coloana
-                sparse_matrix[num_2].append((num_1, num_3))
+                sparse_matrix[num_2].append([num_1, num_3])
         return sparse_matrix, n
 
     except:
@@ -90,8 +90,16 @@ def Gauss_Seidel(A, b, x, n, k_max):
         print("norm_error:", norm_error)
 
 
-def norm_solution(A, x, b):
-    pass
+def norm_solution(A, x, b, n):
+    prod = [0 for _ in range(n)]
+    for i in range(n):
+        line = A[i]
+        sum_ = 0
+        for tuple_ in line:
+            if tuple_[1] != i:
+                sum_ += tuple_[0] * x[tuple_[1]]
+            else:
+                diag = tuple_[0]
 
 
 def main():
