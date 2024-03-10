@@ -63,6 +63,7 @@ if __name__ == "__main__":
     # x_list = [0, 2, 4, 6]
     # fx_list = [1, -3, 49, 253]
     # x=1
+
     result = progressive_newton_interpolation(x_list, fx_list, x)
     print("L_n(x) =", result)
     print("|L_x- f(x)| =", abs(result - function_1(x)))
@@ -82,5 +83,5 @@ if __name__ == "__main__":
 
     print("|P(x)- f(x)| =", abs(result - function_1(x_)))
 
-    difference = sum(np.abs(horner_method(c, x_el) - function_1(x_el)) for x_el in x)
-    print("Difference= ", difference)
+    difference = sum(abs(horner_method(c, x_el) - function_1(x_el)) for x_el in x)
+    print("Sum of differences= ", difference)
