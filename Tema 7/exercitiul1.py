@@ -47,7 +47,7 @@ def Muller(coef, n, R):
 
         if abs(b + sign(b) * np.sqrt(b * b - 4 * a * c)) < epsilon:
             break
-        deltax = (2 * c) / abs(b + sign(b) * np.sqrt(b * b - 4 * a * c))
+        deltax = (2.0 * c) / abs(b + sign(b) * np.sqrt(b * b - 4 * a * c))
         x_3 = x_2 - deltax
         k += 1
         x_0 = x_1
@@ -83,10 +83,15 @@ def check_solution(x_2, sol, epsilon):
     return True
 
 
+def save_solution(sol):
+    with open("solution_test.txt", "w") as file:
+        file.write(str(sol))
+
+
 def main():
     n = 4
     a = [1, -6, 11, -6]
-   # a=gen_pol(n)
+    a = gen_pol(n)
     print("a:", a)
     R = Calculate_Roots(a, n)
 
@@ -101,7 +106,7 @@ def main():
         i += 1
 
     print("sol:", sol)
-
+    save_solution(sol)
     print("roots:", -R, R)
 
 
