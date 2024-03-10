@@ -39,6 +39,18 @@ def extract_data(file_path):
     except:
         print("Error while reading the file 1")
 
+def check_diagonal(A, n):
+    for i in range(n):
+        diagonal_element_found = False
+        for entry in A[i]:
+            if entry[1] == i:
+                diagonal_element_found = True
+                break
+        if not diagonal_element_found:
+            print("Elementul de pe diagonala la linia", i, "nu este specificat în fișierul de intrare.")
+            return False
+    print("Toate elementele de pe diagonala sunt specificate în fișierul de intrare.")
+    return True
 
 def extract_b(file_path):
     b = []
