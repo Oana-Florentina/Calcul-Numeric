@@ -59,8 +59,7 @@ def Gauss_Seidel(A, b, x, n, k_max):
     old_x = []
     norm_error = 0
     while True:
-        for i in range(n):
-            old_x[i] = x[i]
+        old_x = np.copy(x)
         for i in range(n):
             line = A[i]
             sum_ = 0
@@ -81,8 +80,10 @@ def Gauss_Seidel(A, b, x, n, k_max):
 
     print("Number of iterations: ", k)
     if norm_error < epsilon:
-        print("convergenta")
         print("x:", x)
+        print("convergenta")
+        print("norm_error:", norm_error)
+
 
     else:
         print("divergenta")
