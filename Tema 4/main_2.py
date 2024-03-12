@@ -17,7 +17,7 @@ def extract_data(file_path):
                     num_1 = float(matches.group(1))
                     num_2 = int(matches.group(2))
                     num_3 = int(matches.group(3))
-                    element_list.append((num_1, num_2, num_3))
+                    element_list.append([num_1, num_2, num_3])
     except Exception as e:
         print(f"Error: {e}")
     return n, element_list
@@ -31,13 +31,19 @@ def create_vectors(n, element_list):
     sorted_elements = sorted(element_list, key=lambda x: (x[1], x[2]))
 
     last_row = -1
-    for value, row, col in sorted_elements:
-        values.append(value)
-        ind_col.append(col)
+    last_column = -1
+    for i, (value, row, col) in enumerate(sorted_elements):
+        if row == last_row and col == last_column:
+            values[-1] += value
+        else:
+            values.append(value)
+            ind_col.append(col)
 
         if row != last_row:
             row_start[row] = len(values) - 1
             last_row = row
+
+        last_column = col
 
     row_start[n] = len(values)
 
