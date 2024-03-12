@@ -120,11 +120,10 @@ def inverse_with_qr(Q, R):
         inverse[:, i] = x
         print("x:", x)
 
+    print("aiciiiiii")
+    print(inverse)
     return inverse
 
-def qr_decomposition(A):
-    Q, R = np.linalg.qr(A)
-    return Q, R
 
 
 def main():
@@ -135,6 +134,7 @@ def main():
     A = generate_matrix(n)
     A_init = np.copy(A)
     A_init = np.array(A_init, dtype=np.float32)
+    A_init2=np.copy(A_init)
     print("--------ex1----------")
     print()
     print("A:")
@@ -151,7 +151,7 @@ def main():
 
     Q, R, b = QR(A, n, b)
     inverse_qr=inverse_with_qr(Q, R)
-    inverse_library = np.linalg.inv(A)
+    inverse_library = np.linalg.inv(A_init2)
     difference = np.linalg.norm(inverse_qr - inverse_library)
     print("Norma diferenței dintre inversa calculată cu QR și inversa din bibliotecă:", difference)
     print()
@@ -167,6 +167,7 @@ def main():
     X_house = solve_system(R, n, np.dot(Q.T, b_init))
 
     x_QR = find_x_qr_with_lib(A_init, n, b_init)
+
     print("x_QR:", x_QR)
     print("X_house:", X_house)
     print("norma:", calculate_norm(x_QR, X_house))
