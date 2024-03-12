@@ -1,4 +1,5 @@
 import copy
+import random
 
 import numpy as np
 
@@ -48,6 +49,7 @@ def LU_decomposition(A, A_init, n):
         return "Matrix is not valid"
 
     for p in range(1, n + 1):
+        # inf triunghiulara
         for i in range(p, n + 1):
             A[i - 1][p - 1] = A_init[i - 1][p - 1] - sum(A[i - 1][k - 1] * A[k - 1][p - 1] for k in range(1, p))
 
@@ -185,12 +187,24 @@ def LU_decomposition_2(A_init, n):
     return L, U
 
 
+def generate_matrix(n):
+    return [[random.randint(-10, 10) for _ in range(n)] for _ in range(n)]
+
+
+def generate_vector_s(n):
+    return [random.randint(-10, 10) for _ in range(n)]
+
+
 if __name__ == "__main__":
     # A_init = [[2, 0, 2],
     #           [1, 2, 5],
     #           [1, 1, 7]]
     #
     # b = [4, 10, 10]
+
+    # A_init = generate_matrix(3)
+    #
+    # b = generate_vector_s(3)
 
     A_init = [[2.5, 2, 2],
               [5, 6, 5],

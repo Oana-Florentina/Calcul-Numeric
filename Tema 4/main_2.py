@@ -68,24 +68,22 @@ def extract_b(file_path):
         print("Error while reading the file b")
 
 
-#
-#
-# def check_diagonal(n, values, ind_col, row_start):
-#     for row in range(n):
-#         diagonal_element_found = False
-#         for idx in range(row_start[row], row_start[row + 1]):
-#             if ind_col[idx] == row:
-#                 diagonal_element_found = True
-#                 if abs(values[idx]) < epsilon:
-#                     print(f"Diagonal element from row {row} is 0")
-#                     return
-#                 break
-#         if not diagonal_element_found:
-#             print(f"Doesn't have a diagonal element in row {row}")
-#             return
-#
-#     print("Matrix has diagonal elements")
-#
+def check_diagonal(n, values, ind_col, row_start):
+    for row in range(n):
+        diagonal_element_found = False
+        for idx in range(row_start[row], row_start[row + 1]):
+            if ind_col[idx] == row:
+                diagonal_element_found = True
+                if abs(values[idx]) < epsilon:
+                    print(f"Diagonal element from row {row} is 0")
+                    return
+                break
+        if not diagonal_element_found:
+            print(f"Doesn't have a diagonal element in row {row}")
+            return
+
+    print("Matrix has diagonal elements")
+
 
 def Gauss_Seidel(n, values, ind_col, row_start, b, k_max):
     k = 0

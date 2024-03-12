@@ -30,14 +30,14 @@ def extract_data(file_path):
                         sparse_matrix[num_2][index][0] += num_1
                         dup = True
 
-
                 if not dup:
-                    sparse_matrix[num_2].append([num_1, num_3]) # moddd
+                    sparse_matrix[num_2].append([num_1, num_3])  # moddd
 
         return sparse_matrix, n
 
     except:
         print("Error while reading the file 1")
+
 
 def check_diagonal(A, n):
     for i in range(n):
@@ -51,6 +51,7 @@ def check_diagonal(A, n):
             return False
     print("Toate elementele de pe diagonala sunt specificate în fișierul de intrare.")
     return True
+
 
 def extract_b(file_path):
     b = []
@@ -91,11 +92,15 @@ def Gauss_Seidel(A, b, x, n, k_max):
         for i in range(n):
             line = A[i]
             sum_ = 0
+            diag = None
             for tuple_ in line:
                 if tuple_[1] != i:
                     sum_ += tuple_[0] * x[tuple_[1]]
                 else:
                     diag = tuple_[0]
+
+            if diag is None or abs(diag) < epsilon:
+                raise ValueError(f"Diagonal element from row {i} is 0 or doesn't exist, determinant is 0")
 
             x[i] = (b[i] - sum_) / diag
 
@@ -133,7 +138,7 @@ def norm_solution(A, x, b, n):
         line = A[i]
         line_sum = 0
         for tuple_ in line:
-           line_sum += tuple_[0] * x[tuple_[1]]
+            line_sum += tuple_[0] * x[tuple_[1]]
         prod[i] = line_sum
 
     for i in range(n):
