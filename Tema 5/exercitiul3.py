@@ -24,6 +24,7 @@ def calculate_moore_penrose_pseudoinverse(A):
     pseudo_inverse = np.linalg.pinv(A)
     return pseudo_inverse
 
+
 def calculate_least_squares_pseudoinverse(A):
     ATA_inverse = np.linalg.inv(np.dot(A.T, A))
     pseudo_inverse_least_squares = np.dot(ATA_inverse, A.T)
