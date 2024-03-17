@@ -141,7 +141,7 @@ if __name__ == "__main__":
     max_k = 300000
     max_p = 8
     print("Approximate gradient:")
-    algorithm(function_4, approximate_gradient, x, y, learning_rate, max_k)
+    algorithm(function_1, approximate_gradient, x, y, learning_rate, max_k)
     print()
 
     print("Analytic gradient:")

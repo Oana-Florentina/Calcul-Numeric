@@ -4,14 +4,16 @@ import re
 epsilon = 10 ** (-5)
 
 
-def extract_data(file_path):
+def extract_data(file_path, sparse_matrix=None, compare_matrix=None, sign_=1):
     pattern = r'(-?[\d.]+)\s*,\s*(\d+)\s*,\s*(\d+)'
     try:
         f = open(file_path, "r")
         n = int(f.readline().strip())
-        sparse_matrix = [[] for _ in range(n)]
+        if sparse_matrix is None:
+            sparse_matrix = [[] for _ in range(n)]
+
         for line in f:
-            # print(line)
+
             matches = re.match(pattern, line.strip())
             if matches:
                 num_1 = float(matches.group(1))  # elementul
@@ -19,19 +21,27 @@ def extract_data(file_path):
                 num_3 = int(matches.group(3))  # coloana
 
                 if num_1 == 0:
-                    print("Matrix has a 0 element but maybe there are other elements in the same line")
-                    return None
+                    continue
 
                 dup = False
                 for index, tuple_ in enumerate(sparse_matrix[num_2]):
                     column = tuple_[1]
                     if column == num_3:
-                        print("Matrix has multiple elements in the same position")
-                        sparse_matrix[num_2][index][0] += num_1
+                        # print("Matrix has multiple elements in the same position")
+                        sparse_matrix[num_2][index][0] += sign_ * num_1
+                        # stergem elementul daca suma este 0
+                        # epsilooon
+                        if sparse_matrix[num_2][index][0] < epsilon:
+                            del sparse_matrix[num_2][index]
+
                         dup = True
 
                 if not dup:
                     sparse_matrix[num_2].append([num_1, num_3])  # moddd
+
+                    if compare_matrix is not None:
+                        print("Matrix has different elements. AB != A + B")
+                        return
 
         return sparse_matrix, n
 
@@ -152,10 +162,18 @@ def norm_solution(A, x, b, n):
         print("Norm is greater than epsilon, so the solution is incorrect")
 
 
+def verify_matrix_is_empty(sparse_matrix):
+    for line in sparse_matrix:
+        if len(line) > 0:
+            print("Matrix has different elements. AB != A + B")
+            return
+    print("Matrix has the same elements. AB == A + B")
+
+
 def main():
-    A, n = extract_data("a_5.txt")
+    A, n = extract_data("a_1.txt")
     x = [0 for _ in range(n)]
-    b = extract_b("b_5.txt")
+    b = extract_b("b_1.txt")
     print(len(A))
     print(len(b))
     k_max = 30000
@@ -166,6 +184,19 @@ def main():
     # n = 5
     x = Gauss_Seidel(A, b, x, n, k_max)
     norm_solution(A, x, b, n)
+
+    # bonus
+    A_, n_ = extract_data("a.txt")
+    AB_, n__ = extract_data("b.txt", A_)
+    print(AB_)
+
+    if n_ != n__:
+        print("Matrices have different sizes")
+        return
+
+    result, n = extract_data("aplusb.txt", AB_, 1, -1)
+    print(result)
+    verify_matrix_is_empty(result)
 
 
 if __name__ == "__main__":
