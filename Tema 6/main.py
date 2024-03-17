@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def progressive_newton_interpolation(x_list, y, x):
@@ -54,6 +55,16 @@ def horner_method(c, x_):
     return d
 
 
+def plot_polynomial(x_values, y_values, y_text, title):
+    plt.plot(x_values, y_values, label='f(x)')
+    plt.xlabel('x')
+    plt.ylabel(y_text)
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
 if __name__ == "__main__":
     print("Progressive Newton interpolation")
     x_list = [0, 1, 2, 3, 4, 5]
@@ -85,3 +96,15 @@ if __name__ == "__main__":
 
     difference = sum(abs(horner_method(c, x_el) - function_1(x_el)) for x_el in x)
     print("Sum of differences= ", difference)
+
+    x_values = np.linspace(0, 5, 400)
+    y_values = function_1(x_values)
+    plot_polynomial(x_values, y_values, "f(x)", "Function")
+
+    x_values = np.linspace(0, 5, 400)
+    y_values = [horner_method(c, x_el) for x_el in x_values]
+    plot_polynomial(x_values, y_values, "P(x)", "Least squares method")
+
+    x_values = np.linspace(0, 5, 400)
+    y_values = [progressive_newton_interpolation(x_list, fx_list, x_el) for x_el in x_values]
+    plot_polynomial(x_values, y_values, "L_n(x)", "Progressive Newton interpolation")
