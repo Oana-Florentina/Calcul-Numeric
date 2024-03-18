@@ -79,7 +79,7 @@ def determinant(A):
 def forward_substitution(A, n, b):
     y = [0 for _ in range(n)]
 
-    if determinant(A) == 0:
+    if abs( determinant(A) ) < epsilon:
         print("Matrix is not valid")
         return "Matrix is not valid"
 

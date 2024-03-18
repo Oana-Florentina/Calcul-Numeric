@@ -2,7 +2,7 @@ from random import random
 import random
 import numpy as np
 
-epsilon = 10 ** (-4)
+epsilon = 10 ** (-8)
 
 
 # Muller
@@ -89,8 +89,8 @@ def save_solution(sol):
 
 
 def main():
-    n = 4
-    a = [1.0, -6.0, 11.0, -6.0]
+    n = 5
+    a = [42.0, -55.0, -42.0, 49.0, -6.0]
    # a = gen_pol(n)
     print("a:", a)
     R = Calculate_Roots(a, n)
@@ -99,7 +99,7 @@ def main():
     x_2 = Muller(a, n, R)
     sol.append(x_2)
     i = 1
-    while i < 18 * n:
+    while i < 30 * n:
         x_2 = Muller(a, n, R)
         if check_solution(x_2, sol, epsilon):
             sol.append(x_2)

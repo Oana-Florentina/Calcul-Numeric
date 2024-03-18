@@ -11,18 +11,15 @@ def main():
     k = 0
     print("K:", k)
     print("A:", A)
-
+    k_max=10000
     try:
-        # Verificăm dacă matricea este pozitiv definită
         if not is_positive_definite(A):
             raise ValueError("Matricea nu este pozitiv definită.")
 
-        # Calculăm factorizarea Cholesky
         L = cholesky.cholesky(A)
         print(L)
 
-        # Calculăm factorizarea Cholesky
-        while np.linalg.norm(A - L @ L.T) > epsilon:
+        while np.linalg.norm(A - L @ L.T) > epsilon or k > k_max:
             k += 1
             A = L @ L.T
             L = cholesky.cholesky(A)

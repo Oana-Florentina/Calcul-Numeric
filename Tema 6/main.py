@@ -59,19 +59,19 @@ if __name__ == "__main__":
     x_list = [0, 1, 2, 3, 4, 5]
     fx_list = [50, 47, -2, -121, -310, -545]
     x = 1.5
-
+    y_ = 30.3125
     # x_list = [0, 2, 4, 6]
     # fx_list = [1, -3, 49, 253]
     # x=1
 
     result = progressive_newton_interpolation(x_list, fx_list, x)
     print("L_n(x) =", result)
-    print("|L_x- f(x)| =", abs(result - function_1(x)))
+    print("|L_x- f(x)| =", abs(result - y_))
 
     a = 0
     b = 5
     n = 5
-    m = 5
+    m = 1
     x_ = 1.5
     h = (b - a) / n
     x = [a + i * h for i in range(n + 1)]
