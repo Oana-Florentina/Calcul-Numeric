@@ -4,11 +4,12 @@ import numpy as np
 
 epsilon = 1e-5
 
+
 def generate_vector_for_symmetric_matrix(n):
     v = []
     for i in range(n):
         for j in range(i, n):
-             v.append(random.randint(-10, 10))
+            v.append(random.randint(-10, 10))
     return v
 
 
@@ -27,8 +28,8 @@ def calculate_p_q(A):
     max = -999999
     for i in range(n):
         for j in range(i + 1, n):
-            if abs(A[index(i,j)]) > max:
-                max = abs(A[index(i,j)])
+            if abs(A[index(i, j)]) > max:
+                max = abs(A[index(i, j)])
                 p = i
                 q = j
     return p, q
@@ -51,7 +52,7 @@ def calculate_c_s_t(A, p, q):
 def is_not_diagonal(A, n):
     for i in range(n):
         for j in range(n):
-            if i != j and abs(A[index(i,j)]) > epsilon:
+            if i != j and abs(A[index(i, j)]) > epsilon:
                 return True
     return False
 
@@ -89,11 +90,11 @@ def jacobi(A):
     k_max = 1000
     p, q = calculate_p_q(A)
     print("p=", p, "q=", q)
-    print("A index: ", A[index(p,q)])
+    print("A index: ", A[index(p, q)])
     print("index:", index(p, q))
     c, s, t = calculate_c_s_t(A, p, q)
     print("c=", c, "s=", s, "t=", t)
-    while k <= k_max and is_not_diagonal(A, 3):
+    while k <= k_max and is_not_diagonal(A, n):
         R = np.zeros((n, n))
         for j in range(n):
             for i in range(n):
@@ -127,7 +128,6 @@ def jacobi(A):
     return A, U
 
 
-
 def generate_symmetric_matrix(n):
     A = np.zeros((n, n))
     for i in range(n):
@@ -149,6 +149,7 @@ def print_matrix_from_vector(v, n):
             else:
                 print(v[j * (j + 1) // 2 + i], end=" ")
         print()
+
 
 def print_matrix(A):
     for i in range(len(A)):
@@ -185,6 +186,7 @@ def calculate_eigenvalues(A_init, U, n):
     for i in range(n):
         for j in range(i + 1):
             A_init_matrix[i][j] = A_init[index]
+            A_init_matrix[j][i] = A_init[index]
             index += 1
 
     # Calculăm valorile proprii aproximative ale matricei A_init
@@ -201,10 +203,13 @@ def calculate_eigenvalues(A_init, U, n):
 
     return norm_difference
 
+
 def main():
     n = 3
-    A = generate_vector_for_symmetric_matrix(n)
+
+    A = [1, 1, 1, 2, 2, 2]
     A = [0, 0, 0, 1, 1, 1]
+
     A_init = np.copy(A)
     print("A_init:")
     print_matrix_from_vector(A_init, n)
