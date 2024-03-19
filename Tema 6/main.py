@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def progressive_newton_interpolation(x_list, y, x):
+def progressive_newton_interpolation(x_list, y_, x):
+    y = y_.copy()
     n = len(y) - 1
     h = (x_list[-1] - x_list[0]) / n
     t = (x - x_list[0]) / h
@@ -62,7 +63,6 @@ def plot_polynomial(x_values, y_values, y_text, title):
     plt.title(title)
     plt.legend()
     plt.grid(True)
-    plt.show()
 
 
 if __name__ == "__main__":
@@ -71,18 +71,27 @@ if __name__ == "__main__":
     fx_list = [50, 47, -2, -121, -310, -545]
     x = 1.5
     y_ = 30.3125
+
     # x_list = [0, 2, 4, 6]
     # fx_list = [1, -3, 49, 253]
-    # x=1
+    # x = 1
 
     result = progressive_newton_interpolation(x_list, fx_list, x)
     print("L_n(x) =", result)
     print("|L_x- f(x)| =", abs(result - y_))
 
+    plot_polynomial(x_list, fx_list, "f(x)", "Function")
+    plt.show()
+
+    x_values = np.linspace(0, 5, 1000)
+    y_values = [progressive_newton_interpolation(x_list, fx_list, x_el) for x_el in x_values]
+    plot_polynomial(x_values, y_values, "L_n(x)", "Progressive Newton interpolation")
+    plt.show()
+
     a = 0
     b = 5
     n = 5
-    m = 1
+    m = 4
     x_ = 1.5
     h = (b - a) / n
     x = [a + i * h for i in range(n + 1)]
@@ -97,14 +106,10 @@ if __name__ == "__main__":
     difference = sum(abs(horner_method(c, x_el) - function_1(x_el)) for x_el in x)
     print("Sum of differences= ", difference)
 
-    x_values = np.linspace(0, 5, 400)
+    x_values = np.linspace(0, 5, 1000)
     y_values = function_1(x_values)
     plot_polynomial(x_values, y_values, "f(x)", "Function")
 
-    x_values = np.linspace(0, 5, 400)
     y_values = [horner_method(c, x_el) for x_el in x_values]
     plot_polynomial(x_values, y_values, "P(x)", "Least squares method")
-
-    x_values = np.linspace(0, 5, 400)
-    y_values = [progressive_newton_interpolation(x_list, fx_list, x_el) for x_el in x_values]
-    plot_polynomial(x_values, y_values, "L_n(x)", "Progressive Newton interpolation")
+    plt.show()
