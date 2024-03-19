@@ -20,7 +20,7 @@ def extract_data(file_path, sparse_matrix=None, compare_matrix=None, sign_=1):
                 num_2 = int(matches.group(2))  # linia
                 num_3 = int(matches.group(3))  # coloana
 
-                if num_1 == 0:
+                if num_1 < epsilon:
                     continue
 
                 dup = False

@@ -68,22 +68,24 @@ def extract_b(file_path):
         print("Error while reading the file b")
 
 
-def check_diagonal(n, values, ind_col, row_start):
-    for row in range(n):
-        diagonal_element_found = False
-        for idx in range(row_start[row], row_start[row + 1]):
-            if ind_col[idx] == row:
-                diagonal_element_found = True
-                if abs(values[idx]) < epsilon:
-                    print(f"Diagonal element from row {row} is 0")
-                    return
-                break
-        if not diagonal_element_found:
-            print(f"Doesn't have a diagonal element in row {row}")
-            return
-
-    print("Matrix has diagonal elements")
-
+#
+#
+# def check_diagonal(n, values, ind_col, row_start):
+#     for row in range(n):
+#         diagonal_element_found = False
+#         for idx in range(row_start[row], row_start[row + 1]):
+#             if ind_col[idx] == row:
+#                 diagonal_element_found = True
+#                 if abs(values[idx]) < epsilon:
+#                     print(f"Diagonal element from row {row} is 0")
+#                     return
+#                 break
+#         if not diagonal_element_found:
+#             print(f"Doesn't have a diagonal element in row {row}")
+#             return
+#
+#     print("Matrix has diagonal elements")
+#
 
 def Gauss_Seidel(n, values, ind_col, row_start, b, k_max):
     k = 0
@@ -153,21 +155,118 @@ def norm_solution(n, values, ind_col, row_start, b, x):
         print("Norm is greater than epsilon, so the solution is incorrect")
 
 
+def add_sparse_matrices(values_a, ind_col_a, row_start_a, values_b, ind_col_b, row_start_b, n):
+    values_result = []
+    ind_col_result = []
+    row_start_result = [0]
+
+    for row in range(n):
+        a_index = row_start_a[row]
+        b_index = row_start_b[row]
+        a_end = row_start_a[row + 1]
+        b_end = row_start_b[row + 1]
+
+        current_row_elements = {}
+
+        while a_index < a_end or b_index < b_end:
+            if a_index < a_end:
+                col_a = ind_col_a[a_index]
+                val_a = values_a[a_index]
+                if col_a in current_row_elements:
+                    current_row_elements[col_a] += val_a
+                else:
+                    current_row_elements[col_a] = val_a
+                a_index += 1
+
+            if b_index < b_end:
+                col_b = ind_col_b[b_index]
+                val_b = values_b[b_index]
+                if col_b in current_row_elements:
+                    current_row_elements[col_b] += val_b
+                else:
+                    current_row_elements[col_b] = val_b
+                b_index += 1
+
+        for col, val in sorted(current_row_elements.items()):
+            if val != 0:
+                ind_col_result.append(col)
+                values_result.append(val)
+
+        row_start_result.append(len(values_result))
+
+    return values_result, ind_col_result, row_start_result
+
+
+def compare_sparse_matrices(values_a, ind_col_a, row_start_a, values_b, ind_col_b, row_start_b):
+    if len(values_a) != len(values_b) or len(ind_col_a) != len(ind_col_b) or len(row_start_a) != len(row_start_b):
+        print("Matrices are not equal len")
+        return False
+
+    for i in range(len(row_start_a)):
+        if row_start_a[i] != row_start_b[i]:
+            print("Matrices are not equal")
+            return False
+
+    for i in range(len(ind_col_a)):
+        if ind_col_a[i] != ind_col_b[i]:
+            print("Matrices are not equal")
+            return False
+
+    for i in range(len(values_a)):
+        if abs(values_a[i] - values_b[i]) > epsilon:
+            print("Matrices are not equal")
+
+            return False
+
+    print("Matrices are equal")
+    return True
+
+
 def main():
-    n, element_list = extract_data("a_4.txt")
+    n, element_list = extract_data("a_1.txt")
     print("n:", n)
     values, ind_col, row_start = create_vectors(n, element_list)
     # print("values:", values)
     # print("ind_col:", ind_col)
     # print("row_start:", row_start)
-    b = extract_b("b_4.txt")
+    b = extract_b("b_1.txt")
     # b = [6, 7, 8, 9, 1]
     # check_diagonal(n, values, ind_col, row_start)
     k_max = 100000
     x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
-    print("x:", x)
+    # print("x:", x)
 
     norm_solution(n, values, ind_col, row_start, b, x)
+
+    # bounus
+    n, values_a = extract_data("a.txt")
+    n_, values_b = extract_data("b.txt")
+    if n != n_:
+        print("Matrices have different dimensions")
+        return
+
+    values_a, ind_col_a, row_start_a = create_vectors(n, values_a)
+    values_b, ind_col_b, row_start_b = create_vectors(n, values_b)
+
+    values_result, ind_col_result, row_start_result = add_sparse_matrices(values_a, ind_col_a, row_start_a, values_b,
+                                                                          ind_col_b, row_start_b, n)
+
+    print("values_result:", values_result)
+    print("ind_col_result:", ind_col_result)
+    print("row_start_result:", row_start_result)
+
+    n__, values_ab = extract_data("aplusb.txt")
+    if n != n__:
+        print("Matrices have different dimensions")
+        return
+    values_ab, ind_col_ab, row_start_ab = create_vectors(n, values_ab)
+    print("values_ab:", values_ab)
+    print("ind_col_ab:", ind_col_ab)
+    print("row_start_ab:", row_start_ab)
+
+    are_equal = compare_sparse_matrices(values_ab, ind_col_ab, row_start_ab, values_result, ind_col_result,
+                                        row_start_result)
+    print("Matrices are equal:", are_equal)
 
 
 if __name__ == "__main__":
