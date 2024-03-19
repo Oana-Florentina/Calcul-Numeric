@@ -2,7 +2,7 @@ from random import random
 import random
 import numpy as np
 
-epsilon = 10 ** (-8)
+epsilon = 10 ** (-3)
 
 
 # Muller
@@ -78,7 +78,7 @@ def Calculate_Roots(coef, n):
 
 def check_solution(x_2, sol, epsilon):
     for i in range(len(sol)):
-        if abs(x_2 - sol[i]) < epsilon:
+        if abs(x_2 - sol[i]) < 0.1:
             return False
     return True
 
@@ -88,10 +88,37 @@ def save_solution(sol):
         file.write(str(sol))
 
 
+def calculate_derivate_polinom(coef, n):
+    derivata = [0] * (n - 1)
+    for i in range(0, n - 1):
+        derivata[i] = coef[i] * (n - i - 1)
+    return derivata
+
+
+def bonus(coef, R, n):
+    x1, _, _ = choose_x1_x2_x3(R)
+    derivata_coef = calculate_derivate_polinom(coef, n)
+
+    y = x1 - (P(coef, x1, n) / P(derivata_coef, x1, n - 1))
+
+    x2 = x1 - (((P(coef, x1, n) ** 2) + P(coef, y, n) ** 2) / (
+                P(derivata_coef, x1, n - 1) * (P(coef, x1, n) - P(coef, y, n))))
+    while np.linalg.norm(x1 - x2) > epsilon:
+        x1 = x2
+        if P(derivata_coef, x1, n - 1) < epsilon:
+            return bonus(coef, R, n)
+        y = x1 - (P(coef, x1, n) / P(derivata_coef, x1, n - 1))
+        if (P(derivata_coef, x1, n - 1) * (P(coef, x1, n) - P(coef, y, n))) < epsilon:
+            return bonus(coef, R, n)
+        x2 = x1 - (((P(coef, x1, n) ** 2) + P(coef, y, n) ** 2) / (
+                    P(derivata_coef, x1, n - 1) * (P(coef, x1, n) - P(coef, y, n))))
+    return x2
+
+
 def main():
     n = 5
     a = [42.0, -55.0, -42.0, 49.0, -6.0]
-   # a = gen_pol(n)
+    # a = gen_pol(n)
     print("a:", a)
     R = Calculate_Roots(a, n)
 
@@ -108,6 +135,19 @@ def main():
     print("sol:", sol)
     save_solution(sol)
     print("roots:", -R, R)
+    print("---------bonussssssss-------")
+    bonus_sol = []
+    print("here:::", P([1, -6, 11, -6], 1, 4))
+    print("here:::", P([1, -6, 11, -6], 2, 4))
+    print("here:::", P([1, -6, 11, -6], 3, 4))
+    print("derivata:", calculate_derivate_polinom([1, -6, 11, -6], 4))
+    i = 0
+    while i < 3000:
+        x_2 = bonus([1, -6, 11, -6], 12, 4)
+        if check_solution(x_2, bonus_sol, epsilon):
+            bonus_sol.append(x_2)
+        i += 1
+    print("bonus sol: ", bonus_sol)
 
 
 if __name__ == "__main__":

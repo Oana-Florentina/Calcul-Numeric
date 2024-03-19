@@ -7,6 +7,8 @@ epsilon = 1e-5
 
 def calculate_p_q(A):
     n = len(A)
+    print("n=", n)
+
     p = 0
     q = 0
     max = -999999
@@ -48,9 +50,14 @@ def jacobi(A):
     n = len(A)
     k_max = 1000
     p, q = calculate_p_q(A)
+    print("p=", p, "q=", q)
+    print("A index: ", A[p][q])
+
     c, s, t = calculate_c_s_t(A, p, q)
+    print("c=", c, "s=", s, "t=", t)
     while k <= k_max and is_not_diagonal(A):
         R = np.zeros((n, n))
+        print("R=", R)
         for j in range(n):
             for i in range(n):
                 if i == j and i != p and i != q:
@@ -66,13 +73,19 @@ def jacobi(A):
                                 R[i][j] = -s
                             else:
                                 R[i][j] = 0
+        print("R=", R)
+
         A = np.dot(np.dot(R, A), R.T)
+        print("A=", A)
         U = np.dot(U, R.T)
 
         p, q = calculate_p_q(A)
+        print("p=", p, "q=", q)
+
         c, s, t = calculate_c_s_t(A, p, q)
 
         k += 1
+        print("k=", k)
     return A, U
 
 
@@ -99,6 +112,9 @@ def print_matrix(A):
 def main():
     n = 3
     A = generate_symmetric_matrix(n)
+    # A = [ [ 0, 0, 1],
+    #       [ 0, 0, 1],
+    #       [ 1, 1, 1]]
     A_init = np.copy(A)
     print("A_init:")
     print_matrix(A_init)
