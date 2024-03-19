@@ -124,14 +124,59 @@ def inverse_with_qr(Q, R):
     print(inverse)
     return inverse
 
+def is_positive_definite(A):
+    return np.all(np.linalg.eigvals(A) > 0)
 
+def bonus(A):
+    k = 0
+
+
+    Q, R = np.linalg.qr(A)
+
+    k_max = 10000
+    try:
+        if not is_positive_definite(A):
+            raise ValueError("Matricea nu este pozitiv definită.")
+        prev = A
+        Q, R = np.linalg.qr(A)
+        A = R @ Q
+
+        while np.linalg.norm(A - prev) > epsilon or k > k_max:
+            k += 1
+            prev = A
+            Q, R = np.linalg.qr(A)
+            A = R @ Q
+
+
+        return A
+    except np.linalg.LinAlgError as e:
+        print("A apărut o eroare în timpul calculului:", e)
+        return
+    except ValueError as e:
+        print(e)
+        return
+
+
+def generate_positive_definite_matrix(n):
+    A = np.random.rand(n, n)
+    A = 0.5 * (A + A.T)
+    A += np.eye(n) * n
+    positive_definite_matrix = np.dot(A, A.T)
+    return positive_definite_matrix
+
+
+def calculate_svd(A):
+    U, S, VT = np.linalg.svd(A)
+    return U, S, VT
 
 def main():
     n = 3
     s = [3, 2, 1]
     A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
+
     s = generate_vector_s(n)
     A = generate_matrix(n)
+    A_bonus = generate_positive_definite_matrix(n)
     A_init = np.copy(A)
     A_init = np.array(A_init, dtype=np.float32)
     A_init2=np.copy(A_init)
@@ -180,6 +225,11 @@ def main():
     print("norm between A_init * x_QR and b_init:", calculate_second_norm(A_init, x_QR, b_init))
     print("norm between X_house and s:", calculate_third_norm(X_house, s))
     print("norm between x_QR and s:", calculate_third_norm(x_QR, s))
+
+    print("--------BONUUUS----------")
+    _, singular_values, _ = calculate_svd(A_bonus)
+    print("singular_values: ", singular_values)
+    print("bonus: ", bonus(A_bonus))
 
 
 

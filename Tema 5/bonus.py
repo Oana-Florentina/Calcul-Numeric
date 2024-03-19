@@ -209,7 +209,8 @@ def main():
 
     A = [1, 1, 1, 2, 2, 2]
     A = [0, 0, 0, 1, 1, 1]
-
+    A = [0, 0, 0, 2, 1, 1]
+    A = [0, 1, 2, 4, 3, 1]
     A_init = np.copy(A)
     print("A_init:")
     print_matrix_from_vector(A_init, n)
