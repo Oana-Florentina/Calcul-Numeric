@@ -1,7 +1,7 @@
 import numpy as np
 import re
 
-epsilon = 10 ** (-5)
+epsilon = 10 ** (-10)
 
 
 def extract_data(file_path, sparse_matrix=None, compare_matrix=None, sign_=1):
@@ -19,9 +19,6 @@ def extract_data(file_path, sparse_matrix=None, compare_matrix=None, sign_=1):
                 num_1 = float(matches.group(1))  # elementul
                 num_2 = int(matches.group(2))  # linia
                 num_3 = int(matches.group(3))  # coloana
-
-                if num_1 < epsilon:
-                    continue
 
                 dup = False
                 for index, tuple_ in enumerate(sparse_matrix[num_2]):
@@ -177,17 +174,18 @@ def main():
     print(len(A))
     print(len(b))
     k_max = 30000
-    # A = [[(2.5, 2), (102.5, 0)], [(3.5, 0), (0.33, 4), (1.05, 2), (104.88, 1)], [(100, 2)], [(1.3, 1), (101.3, 3)],
-    #      [(1.5, 3), (0.73, 0), (102.23, 4)]]
-    # x = [1.0, 2.0, 3.0, 4.0, 5.0]
-    # b = [6.0, 7.0, 8.0, 9.0, 1.0]
-    # n = 5
+    A = [[(2.5, 2), (102.5, 0)], [(3.5, 0), (0.33, 4), (1.05, 2), (104.88, 1)], [(100, 2)], [(1.3, 1), (101.3, 3)],
+         [(1.5, 3), (0.73, 0), (102.23, 4)]]
+    x = [1.0, 2.0, 3.0, 4.0, 5.0]
+    b = [6.0, 7.0, 8.0, 9.0, 1.0]
+    n = 5
     x = Gauss_Seidel(A, b, x, n, k_max)
     norm_solution(A, x, b, n)
 
     # bonus
     A_, n_ = extract_data("a.txt")
     AB_, n__ = extract_data("b.txt", A_)
+    print("Matrix A+B")
     print(AB_)
 
     if n_ != n__:
@@ -195,6 +193,7 @@ def main():
         return
 
     result, n = extract_data("aplusb.txt", AB_, 1, -1)
+    print("Matrix after comparison")
     print(result)
     verify_matrix_is_empty(result)
 
