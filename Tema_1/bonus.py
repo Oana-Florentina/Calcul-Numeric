@@ -1,6 +1,6 @@
 import math
 
-from exercitiul3 import list_of_functions
+from .exercitiul3 import list_of_functions
 
 
 def sin_S(T_x, a):
@@ -14,9 +14,16 @@ def cos_S(T_x, a):
 
 
 def approximations(f, a):
+    Result = ""
     for function in list_of_functions:
-        print(f"n = {function.__name__[2]} ", f(function, a))
+        Result += "n = " + function.__name__[2] + " " + str(f(function, a)) + "\n"
+        #print(f"n = {function.__name__[2]} ", f(function, a))
+    return Result
 
+def return_app_sin():
+    return approximations(sin_S, math.pi/4)
+def return_app_cos():
+    return approximations(cos_S, math.pi/4)
 
 print("Sinus:")
 approximations(sin_S, math.pi/4)
