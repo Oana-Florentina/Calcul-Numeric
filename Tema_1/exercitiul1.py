@@ -14,5 +14,4 @@ def find_u():
 
 find_u()
 
-
-
+bye_world = gr.Interface(lambda name: "Bye " + name, "text", "text")

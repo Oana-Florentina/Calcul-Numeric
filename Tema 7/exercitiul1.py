@@ -137,9 +137,7 @@ def main():
     print("roots:", -R, R)
     print("---------bonussssssss-------")
     bonus_sol = []
-    print("here:::", P([1, -6, 11, -6], 1, 4))
-    print("here:::", P([1, -6, 11, -6], 2, 4))
-    print("here:::", P([1, -6, 11, -6], 3, 4))
+
     print("derivata:", calculate_derivate_polinom([1, -6, 11, -6], 4))
     i = 0
     while i < 3000:

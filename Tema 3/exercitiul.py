@@ -129,8 +129,6 @@ def is_positive_definite(A):
 
 def bonus(A):
     k = 0
-
-
     Q, R = np.linalg.qr(A)
 
     k_max = 10000

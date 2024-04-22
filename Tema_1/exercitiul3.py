@@ -78,8 +78,8 @@ def best_functions():
 
 best_functions()
 hierarchy = sorted(frequency, key=frequency.get, reverse=True)
+
+def return_top():
+    return hierarchy
 print(hierarchy)
 # pt fiecare x, aplic t4..6, calculez eroarea pt fiecare si returnez top3
-
-
-#--------bonusss--------

@@ -79,7 +79,7 @@ def determinant(A):
 def forward_substitution(A, n, b):
     y = [0 for _ in range(n)]
 
-    if abs( determinant(A) ) < epsilon:
+    if abs(determinant(A)) < epsilon:
         print("Matrix is not valid")
         return "Matrix is not valid"
 
@@ -206,9 +206,7 @@ if __name__ == "__main__":
     #
     # b = generate_vector_s(3)
 
-    A_init = [[2.5, 2, 2],
-              [5, 6, 5],
-              [5, 6, 6.5]]
+    A_init = [[2.5, 2, 2], [5, 6, 5], [5, 6, 6.5]]
     b = [2, 2, 2]
 
     A = copy.deepcopy(A_init)

@@ -50,8 +50,8 @@ def jacobi(A):
     n = len(A)
     k_max = 1000
     p, q = calculate_p_q(A)
-    print("p=", p, "q=", q)
-    print("A index: ", A[p][q])
+    # print("p=", p, "q=", q)
+    # print("A index: ", A[p][q])
 
     c, s, t = calculate_c_s_t(A, p, q)
     print("c=", c, "s=", s, "t=", t)
@@ -112,9 +112,9 @@ def print_matrix(A):
 def main():
     n = 3
     A = generate_symmetric_matrix(n)
-    # A = [ [ 0, 0, 1],
-    #       [ 0, 0, 1],
-    #       [ 1, 1, 1]]
+    A = [ [ 0, 0, 1],
+          [ 0, 0, 1],
+          [ 1, 1, 1]]
     A_init = np.copy(A)
     print("A_init:")
     print_matrix(A_init)
