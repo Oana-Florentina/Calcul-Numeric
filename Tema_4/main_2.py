@@ -87,7 +87,7 @@ def extract_b(file_path):
 #     print("Matrix has diagonal elements")
 #
 
-def Gauss_Seidel(n, values, ind_col, row_start, b, k_max):
+def Gauss_Seidel(n, values, ind_col, row_start, b, k_max, norm_error_max):
     k = 0
     x = [0 for _ in range(n + 1)]
 
@@ -113,12 +113,12 @@ def Gauss_Seidel(n, values, ind_col, row_start, b, k_max):
 
         # print("norm_error:", norm_error)
 
-        if k > k_max or norm_error < epsilon or norm_error > 10 ** 306:
+        if k > k_max or norm_error < epsilon or norm_error > norm_error_max:
             if k > k_max:
                 print("Number of iterations is greater than k_max")
 
-            if norm_error > 10 ** 90:
-                print("Norm error is greater than 10^")
+            if norm_error > norm_error_max:
+                print("Norm error is greater than norm_error_max")
 
             if norm_error < epsilon:
                 print("Norm error is less than epsilon")
@@ -228,16 +228,15 @@ def compare_sparse_matrices(values_a, ind_col_a, row_start_a, values_b, ind_col_
     return True
 
 
-def process_files_gauss_seidel_norm_2(a_file, b_file, operations):
+def process_files_gauss_seidel_norm_2(a_file, b_file, operations, k_max, norm_error_max):
     results = []
 
     if a_file and b_file:
         n, element_list = extract_data(a_file.name)
         values, ind_col, row_start = create_vectors(n, element_list)
         b = extract_b(b_file.name)
-        k_max = 100000
 
-        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
+        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max, norm_error_max)
         n_s = norm_solution(n, values, ind_col, row_start, b, x)
 
         if "Gauss-Seidel" in operations:
@@ -296,7 +295,8 @@ def process_files_sum_comparison_2(a_file, b_file, aplusb_file, operations):
         # b = [6, 7, 8, 9, 1]
         # check_diagonal(n, values, ind_col, row_start)
         k_max = 100000
-        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
+        norm_error_max = 10 ** 10
+        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max, norm_error_max)
         # print("x:", x)
 
         norm_solution(n, values, ind_col, row_start, b, x)

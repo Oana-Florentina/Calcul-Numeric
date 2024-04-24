@@ -7,11 +7,11 @@ def launch_ui():
     method = gr.Radio(["Method 1", "Method 2"], label="Choose Method", value="Method 1")
     method2 = gr.Radio(["Method 1", "Method 2"], label="Choose Method", value="Method 1")
 
-    def process_files_gauss_seidel_norm_wrapper(method1, a_file, b_file, operations):
+    def process_files_gauss_seidel_norm_wrapper(method1, a_file, b_file, operations, k_max, norm_error_max):
         if method1 == "Method 1":
-            return process_files_gauss_seidel_norm(a_file, b_file, operations)
+            return process_files_gauss_seidel_norm(a_file, b_file, operations, k_max, norm_error_max)
         else:
-            return process_files_gauss_seidel_norm_2(a_file, b_file, operations)
+            return process_files_gauss_seidel_norm_2(a_file, b_file, operations, k_max, norm_error_max)
 
     def process_files_sum_comparison_wrapper(method2, a_file, b_file, aplusb_file, operations):
         if method2 == "Method 1":
@@ -25,7 +25,9 @@ def launch_ui():
             method,
             gr.File(label="Matrix A File (.txt)"),
             gr.File(label="Vector B File (.txt)"),
-            gr.CheckboxGroup(["Gauss-Seidel", "Norm"], label="Operations")
+            gr.CheckboxGroup(["Gauss-Seidel", "Norm"], label="Operations"),
+            gr.Number(value=30000, label="maximum value for k"),
+            gr.Number(value=10**10, label="maximum error for norm")
         ],
         outputs=gr.Textbox(label="Results"),
         title="Gauss-Seidel and Norm",
@@ -51,7 +53,6 @@ def launch_ui():
     iface = gr.TabbedInterface([iface_gauss_seidel_norm, iface_sum_comparison],
                                ["Gauss-Seidel and Norm", "Sum and Comparison"],
                                title="Matrix Operations")
-
     # iface.launch()
     return iface
 

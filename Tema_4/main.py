@@ -91,7 +91,7 @@ def calculate_norm_error(x, old_x):
     return sum_
 
 
-def Gauss_Seidel(A, b, x, n, k_max):
+def Gauss_Seidel(A, b, x, n, k_max, norm_error_max):
     k = 0
     old_x = []
     norm_error = 0
@@ -117,12 +117,12 @@ def Gauss_Seidel(A, b, x, n, k_max):
 
         # print("norm_error:", norm_error)
 
-        if k > k_max or norm_error < epsilon or norm_error > 10 ** 60:
+        if k > k_max or norm_error < epsilon or norm_error > norm_error_max:
             if k > k_max:
                 print("Number of iterations is greater than k_max")
 
             if norm_error > 10 ** 40:
-                print("Norm error is greater than 10^40")
+                print("Norm error is greater than norm_error_max")
 
             if norm_error < epsilon:
                 print("Norm error is less than epsilon")
@@ -174,8 +174,7 @@ def verify_matrix_is_empty(sparse_matrix):
     print("Matrix has the same elements. AB == A + B")
     return "Matrix has the same elements. AB == A + B"
 
-
-def process_files_gauss_seidel_norm(a_file, b_file, operations):
+def process_files_gauss_seidel_norm(a_file, b_file, operations, k_max, norm_error_max):
     print("Processing files")
     results = []
 
@@ -183,9 +182,7 @@ def process_files_gauss_seidel_norm(a_file, b_file, operations):
         A, n = extract_data(a_file.name)
         x = [0 for _ in range(n)]
         b = extract_b(b_file.name)
-        k_max = 30000
-
-        x = Gauss_Seidel(A, b, x, n, k_max)
+        x = Gauss_Seidel(A, b, x, n, k_max, norm_error_max)
         n_s = norm_solution(A, x, b, n)
 
         if "Gauss-Seidel" in operations:
@@ -215,6 +212,7 @@ def process_files_sum_comparison(a_file, b_file, aplusb_file, operations):
     return "\n\n".join(results)
 
 
+
 def main():
     A, n = extract_data("a_1.txt")
     x = [0 for _ in range(n)]
@@ -222,12 +220,13 @@ def main():
     print(len(A))
     print(len(b))
     k_max = 30000
+    norm_error_max = 10 ** 60
     A = [[(2.5, 2), (102.5, 0)], [(3.5, 0), (0.33, 4), (1.05, 2), (104.88, 1)], [(100, 2)], [(1.3, 1), (101.3, 3)],
          [(1.5, 3), (0.73, 0), (102.23, 4)]]
     x = [1.0, 2.0, 3.0, 4.0, 5.0]
     b = [6.0, 7.0, 8.0, 9.0, 1.0]
     n = 5
-    x = Gauss_Seidel(A, b, x, n, k_max)
+    x = Gauss_Seidel(A, b, x, n, k_max, norm_error_max)
     norm_solution(A, x, b, n)
 
     # bonus
