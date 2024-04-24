@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import gradio as gr
 import copy
-from Tema_2.main import process_matrix, LU_decomposition, LU_decomposition_2, determinant, verify_euclidian_norm, \
-    solve_equation, forward_substitution, backward_substitution
+from Tema_2.main import process_matrix, LU_decomposition, LU_decomposition_2, determinant, verify_euclidian_norm, solve_equation, forward_substitution, backward_substitution
 
 
 def launch_interface():
@@ -53,6 +52,7 @@ def launch_interface():
                 det_checkbox = gr.Checkbox(label="Compute Determinant")
                 norm_checkbox = gr.Checkbox(label="Verify Euclidian Norm")
                 solve_checkbox = gr.Checkbox(label="Solve Equation")
+                x_y = gr.Checkbox(label="Calculate y and x")
 
                 btn = gr.Button("Submit")
 
@@ -100,7 +100,7 @@ def launch_interface():
                 vector_examples.change(populate_vector, inputs=[vector_examples], outputs=[vector_input])
 
                 def process_lu_decomposition(random_matrix, random_vector, n, matrix_input, vector_input, det_checkbox,
-                                             norm_checkbox, solve_checkbox):
+                                             norm_checkbox, solve_checkbox, x_y):
                     if random_matrix:
                         A_init = np.random.randint(-10, 10, size=(n, n)).tolist()
                     else:
@@ -129,6 +129,9 @@ def launch_interface():
                     y = forward_substitution(A, n, b)
                     x = backward_substitution(A, n, y)
 
+                    if x_y:
+                        results += f"Y: {y}\nX: {x}\n"
+
                     if norm_checkbox:
                         norm_result = verify_euclidian_norm(A_init, x, b)
                         results += f"Euclidian Norm Verification:\n{norm_result}\n"
@@ -145,7 +148,7 @@ def launch_interface():
 
                 btn.click(process_lu_decomposition,
                           inputs=[random_matrix, random_vector, n_input, matrix_input, vector_input, det_checkbox,
-                                  norm_checkbox, solve_checkbox],
+                                  norm_checkbox, solve_checkbox, x_y],
                           outputs=[output_matrix, output_vector, output_l, output_u, output_text])
 
             with gr.TabItem("LU Decomposition 2"):
