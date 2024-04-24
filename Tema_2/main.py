@@ -1,7 +1,9 @@
 import copy
 import random
 
+import gradio as gr
 import numpy as np
+import pandas as pd
 
 epsilon = 10 ** (-5)
 
@@ -109,6 +111,7 @@ def backward_substitution(A, n, y):
 
 
 def verify_euclidian_norm(A_init, x, b_init):
+    n = len(A_init)
     A_init_x_LU = []
     for i in range(n):
         sum_ = 0
@@ -195,39 +198,70 @@ def generate_vector_s(n):
     return [random.randint(-10, 10) for _ in range(n)]
 
 
-if __name__ == "__main__":
-    # A_init = [[2, 0, 2],
-    #           [1, 2, 5],
-    #           [1, 1, 7]]
-    #
-    # b = [4, 10, 10]
 
-    # A_init = generate_matrix(3)
-    #
-    # b = generate_vector_s(3)
+# if __name__ == "__main__":
+#     # A_init = [[2, 0, 2],
+#     #           [1, 2, 5],
+#     #           [1, 1, 7]]
+#     #
+#     # b = [4, 10, 10]
+#
+#     # A_init = generate_matrix(3)
+#     #
+#     # b = generate_vector_s(3)
+#
+#     A_init = [[2.5, 2, 2],
+#               [5, 6, 5],
+#               [5, 6, 6.5]]
+#     b = [2, 2, 2]
+#
+#     A = copy.deepcopy(A_init)
+#
+#     n = len(A_init)
+#
+#     LU_decomposition(A, A_init, n)
+#
+#     print("det A:", determinant(A))
+#
+#     y = forward_substitution(A, n, b)
+#     print("y:", y)
+#     x = backward_substitution(A, n, y)
+#     print("x:", x)
+#
+#     verify_euclidian_norm(A_init, x, b)
+#
+#     solve_equation(A_init, b, x)
+#
+#     print_matrix(A, "L")
+#     print_matrix(A, "U")
+#     L, U = LU_decomposition_2(A_init, n)
+#     print("L:", L)
+#     print("U:", U)
 
-    A_init = [[2.5, 2, 2], [5, 6, 5], [5, 6, 6.5]]
-    b = [2, 2, 2]
+
+def process_matrix(random_matrix, random_vector, n, matrix_input, vector_input):
+    if random_matrix:
+        A_init = np.random.randint(-10, 10, size=(n, n)).tolist()
+    else:
+        A_init = matrix_input.values.tolist()
+
+    if random_vector:
+        b = np.random.randint(-10, 10, size=(n,)).tolist()
+    else:
+        b = vector_input.values.flatten().tolist()
 
     A = copy.deepcopy(A_init)
-
-    n = len(A_init)
-
     LU_decomposition(A, A_init, n)
 
-    print("det A:", determinant(A))
-
+    det_A = determinant(A)
     y = forward_substitution(A, n, b)
-    print("y:", y)
     x = backward_substitution(A, n, y)
-    print("x:", x)
 
     verify_euclidian_norm(A_init, x, b)
-
     solve_equation(A_init, b, x)
 
-    print_matrix(A, "L")
-    print_matrix(A, "U")
     L, U = LU_decomposition_2(A_init, n)
-    print("L:", L)
-    print("U:", U)
+
+    return pd.DataFrame(A_init, columns=[str(i) for i in range(n)]), pd.DataFrame(b, columns=[
+        "0"]), f"Determinant of A: {det_A}\nY: {y}\nX: {x}\nL: {L}\nU: {U}"
+

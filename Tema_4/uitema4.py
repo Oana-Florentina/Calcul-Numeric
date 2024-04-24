@@ -1,6 +1,6 @@
 import gradio as gr
-from main import process_files_gauss_seidel_norm, process_files_sum_comparison
-from main_2 import process_files_gauss_seidel_norm_2, process_files_sum_comparison_2
+from Tema_4.main import process_files_gauss_seidel_norm, process_files_sum_comparison
+from Tema_4.main_2 import process_files_gauss_seidel_norm_2, process_files_sum_comparison_2
 
 
 def launch_ui():
@@ -52,8 +52,10 @@ def launch_ui():
                                ["Gauss-Seidel and Norm", "Sum and Comparison"],
                                title="Matrix Operations")
 
-    iface.launch()
+    # iface.launch()
+    return iface
 
+app = launch_ui()
 
-if __name__ == "__main__":
-    launch_ui()
+# if __name__ == "__main__":
+#     launch_ui()
