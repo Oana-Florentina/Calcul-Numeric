@@ -41,19 +41,29 @@ class PurpleTriangle(Base):
         )
         super().set(
             body_background_fill="""
-                radial-gradient(circle at 10% 20%, *primary_200 0%, transparent 5%),
-                radial-gradient(circle at 30% 40%, *primary_300 0%, transparent 5%),
-                radial-gradient(circle at 50% 60%, *primary_400 0%, transparent 5%),
-                radial-gradient(circle at 70% 80%, *primary_500 0%, transparent 5%),
-                radial-gradient(circle at 90% 90%, *primary_600 0%, transparent 5%)
-            """,
+                                radial-gradient(circle at 5% 5%, *primary_200 0%, transparent 3%),
+                                radial-gradient(circle at 15% 15%, *primary_300 0%, transparent 3%),
+                                radial-gradient(circle at 25% 25%, *primary_400 0%, transparent 3%),
+                                radial-gradient(circle at 35% 35%, *primary_500 0%, transparent 3%),
+                                radial-gradient(circle at 45% 45%, *primary_600 0%, transparent 3%),
+                                radial-gradient(circle at 55% 55%, *primary_500 0%, transparent 3%),
+                                radial-gradient(circle at 65% 65%, *primary_400 0%, transparent 3%),
+                                radial-gradient(circle at 75% 75%, *primary_300 0%, transparent 3%),
+                                radial-gradient(circle at 85% 85%, *primary_200 0%, transparent 3%),
+                                radial-gradient(circle at 95% 95%, *primary_100 0%, transparent 3%)
+                            """,
             body_background_fill_dark="""
-                radial-gradient(circle at 10% 20%, *primary_800 0%, transparent 5%),
-                radial-gradient(circle at 30% 40%, *primary_700 0%, transparent 5%),
-                radial-gradient(circle at 50% 60%, *primary_600 0%, transparent 5%),
-                radial-gradient(circle at 70% 80%, *primary_500 0%, transparent 5%),
-                radial-gradient(circle at 90% 90%, *primary_400 0%, transparent 5%)
-            """,
+                                radial-gradient(circle at 5% 5%, *primary_800 0%, transparent 3%),
+                                radial-gradient(circle at 15% 15%, *primary_700 0%, transparent 3%),
+                                radial-gradient(circle at 25% 25%, *primary_600 0%, transparent 3%),
+                                radial-gradient(circle at 35% 35%, *primary_500 0%, transparent 3%),
+                                radial-gradient(circle at 45% 45%, *primary_400 0%, transparent 3%),
+                                radial-gradient(circle at 55% 55%, *primary_500 0%, transparent 3%),
+                                radial-gradient(circle at 65% 65%, *primary_600 0%, transparent 3%),
+                                radial-gradient(circle at 75% 75%, *primary_700 0%, transparent 3%),
+                                radial-gradient(circle at 85% 85%, *primary_800 0%, transparent 3%),
+                                radial-gradient(circle at 95% 95%, *primary_900 0%, transparent 3%)
+                            """,
             button_primary_background_fill="linear-gradient(90deg, *primary_300, *secondary_400)",
             button_primary_background_fill_hover="linear-gradient(90deg, *primary_200, *secondary_300)",
             button_primary_text_color="white",
