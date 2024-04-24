@@ -16,6 +16,7 @@ def calculate_vector(A, n, s):
 
 
 def generate_matrix(n):
+    n = int(n)
     return [[random.randint(-10, 10) for _ in range(n)] for _ in range(n)]
 
 
@@ -166,6 +167,7 @@ def generate_positive_definite_matrix(n):
 def calculate_svd(A):
     U, S, VT = np.linalg.svd(A)
     return U, S, VT
+
 
 def main():
     n = 3
