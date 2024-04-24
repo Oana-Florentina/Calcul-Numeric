@@ -31,23 +31,24 @@ def launch_interface():
 
                 n_input = gr.Number(label="Size of the matrix", value=3, precision=0, interactive=True)
 
-                matrix_input = gr.Dataframe(
-                    label="Matrix Input",
-                    value=pd.DataFrame(np.zeros((3, 3)), columns=["0", "1", "2"]),
-                    row_count=3,
-                    col_count=3,
-                    type="pandas",
-                    interactive=True
-                )
+                with gr.Row():
+                    matrix_input = gr.Dataframe(
+                        label="Matrix Input",
+                        value=pd.DataFrame(np.zeros((3, 3)), columns=["0", "1", "2"]),
+                        row_count=3,
+                        col_count=3,
+                        type="pandas",
+                        interactive=True
+                    )
 
-                vector_input = gr.Dataframe(
-                    label="Vector Input",
-                    value=pd.DataFrame(np.zeros((3,)), columns=["0"]),
-                    row_count=3,
-                    col_count=1,
-                    type="pandas",
-                    interactive=True
-                )
+                    vector_input = gr.Dataframe(
+                        label="Vector Input",
+                        value=pd.DataFrame(np.zeros((3,)), columns=["0"]),
+                        row_count=3,
+                        col_count=1,
+                        type="pandas",
+                        interactive=True
+                    )
 
                 det_checkbox = gr.Checkbox(label="Compute Determinant")
                 norm_checkbox = gr.Checkbox(label="Verify Euclidian Norm")

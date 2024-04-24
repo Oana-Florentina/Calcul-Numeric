@@ -140,28 +140,38 @@ def verify_euclidian_norm(A_init, x, b_init):
 
 
 def solve_equation(A_init, b_init, x):
+    result = ""
     A = np.array(A_init)
 
     x_ = np.array(x)
     print("x:", x)
+    result += "x: {}\n".format(x)
 
     b = np.array(b_init)
     print("b_init:", b_init)
+    result += "b_init: {}\n".format(b_init)
 
     x_lib = np.linalg.solve(A, b)
     print("x_lib:", x_lib)
+    result += "x_lib: {}\n".format(x_lib)
 
     norm_1 = np.linalg.norm((x_ - x_lib), ord=2)
     print("||x - x_lib||_2:", norm_1)
+    result += "||x - x_lib||_2: {}\n".format(norm_1)
 
     A_inverse = np.linalg.inv(A)
     print_matrix(A_inverse, "A_inverse")
+    result += "A_inverse: {}\n".format(A_inverse)
 
     x_new = A_inverse.dot(b)
     print("x_new:", x_new)
+    result += "x_new: {}\n".format(x_new)
 
     norm_2 = np.linalg.norm((x_ - x_new), ord=2)
     print("||x - A_inverse * b_init||_2:", norm_2)
+    result += "||x - A_inverse * b_init||_2: {}\n".format(norm_2)
+
+    return result
 
 
 def index(i, j):

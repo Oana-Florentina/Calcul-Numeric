@@ -28,7 +28,7 @@ def function_1(x):
 
 def least_squares_method(n, m, x_, x, y):
     print("x= ", x)
-    print("h= ", h)
+    # print("h= ", h)
 
     B = np.zeros((m + 1, m + 1))
     for i in range(m + 1):
@@ -64,8 +64,7 @@ def plot_polynomial(x_values, y_values, y_text, title):
     plt.legend()
     plt.grid(True)
 
-
-if __name__ == "__main__":
+def main():
     print("Progressive Newton interpolation")
     x_list = [0, 1, 2, 3, 4, 5]
     fx_list = [50, 47, -2, -121, -310, -545]
@@ -91,7 +90,7 @@ if __name__ == "__main__":
     a = 0
     b = 5
     n = 5
-    m = 4
+    m = 5
     x_ = 1.5
     h = (b - a) / n
     x = [a + i * h for i in range(n + 1)]
@@ -113,3 +112,6 @@ if __name__ == "__main__":
     y_values = [horner_method(c, x_el) for x_el in x_values]
     plot_polynomial(x_values, y_values, "P(x)", "Least squares method")
     plt.show()
+
+if __name__ == "__main__":
+    main()
