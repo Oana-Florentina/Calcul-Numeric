@@ -1,6 +1,7 @@
 from .exercitiul1 import find_u
-def verify_operation_plus():
 
+
+def verify_operation_plus():
     x = 1.0
     u = find_u()
     y = u / 10
@@ -11,7 +12,6 @@ def verify_operation_plus():
     print("Rezultatul 2:", result2)
 
     return result1 != result2
-
 
 
 print(verify_operation_plus())
