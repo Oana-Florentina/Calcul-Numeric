@@ -1,5 +1,5 @@
 import re
-
+import gradio as gr
 import numpy as np
 
 epsilon = 10 ** (-5)
@@ -148,11 +148,17 @@ def norm_solution(n, values, ind_col, row_start, b, x):
         prod[i] -= b[i]
 
     norm = max(abs(x) for x in prod)
+    result = "||A*x_GS||_inf: {}".format(norm)
     print("||A*x_GS||_inf:", norm)
+
     if norm < epsilon:
         print("Norm is less than epsilon, so the solution is correct")
+        result += "\nNorm is less than epsilon, so the solution is correct"
     else:
         print("Norm is greater than epsilon, so the solution is incorrect")
+        result += "\nNorm is greater than epsilon, so the solution is incorrect"
+
+    return result
 
 
 def add_sparse_matrices(values_a, ind_col_a, row_start_a, values_b, ind_col_b, row_start_b, n):
@@ -222,52 +228,109 @@ def compare_sparse_matrices(values_a, ind_col_a, row_start_a, values_b, ind_col_
     return True
 
 
-def main():
-    n, element_list = extract_data("a_1.txt")
-    print("n:", n)
-    values, ind_col, row_start = create_vectors(n, element_list)
-    # print("values:", values)
-    # print("ind_col:", ind_col)
-    # print("row_start:", row_start)
-    b = extract_b("b_1.txt")
-    # b = [6, 7, 8, 9, 1]
-    # check_diagonal(n, values, ind_col, row_start)
-    k_max = 100000
-    x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
-    # print("x:", x)
+def process_files_gauss_seidel_norm_2(a_file, b_file, operations):
+    results = []
 
-    norm_solution(n, values, ind_col, row_start, b, x)
+    if a_file and b_file:
+        n, element_list = extract_data(a_file.name)
+        values, ind_col, row_start = create_vectors(n, element_list)
+        b = extract_b(b_file.name)
+        k_max = 100000
 
-    # bounus
-    n, values_a = extract_data("a.txt")
-    n_, values_b = extract_data("b.txt")
-    if n != n_:
-        print("Matrices have different dimensions")
-        return
+        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
+        n_s = norm_solution(n, values, ind_col, row_start, b, x)
 
-    values_a, ind_col_a, row_start_a = create_vectors(n, values_a)
-    values_b, ind_col_b, row_start_b = create_vectors(n, values_b)
+        if "Gauss-Seidel" in operations:
+            results.append("Gauss-Seidel Solution: {}".format(x))
 
-    values_result, ind_col_result, row_start_result = add_sparse_matrices(values_a, ind_col_a, row_start_a, values_b,
-                                                                          ind_col_b, row_start_b, n)
+        if "Norm" in operations:
+            results.append("Norm calculation: {}".format(n_s))
 
-    print("values_result:", values_result)
-    print("ind_col_result:", ind_col_result)
-    print("row_start_result:", row_start_result)
-
-    n__, values_ab = extract_data("aplusb.txt")
-    if n != n__:
-        print("Matrices have different dimensions")
-        return
-    values_ab, ind_col_ab, row_start_ab = create_vectors(n, values_ab)
-    print("values_ab:", values_ab)
-    print("ind_col_ab:", ind_col_ab)
-    print("row_start_ab:", row_start_ab)
-
-    are_equal = compare_sparse_matrices(values_ab, ind_col_ab, row_start_ab, values_result, ind_col_result,
-                                        row_start_result)
-    print("Matrices are equal:", are_equal)
+    return "\n\n".join(results)
 
 
-if __name__ == "__main__":
-    main()
+def process_files_sum_comparison_2(a_file, b_file, aplusb_file, operations):
+    results = []
+
+    if a_file and b_file:
+        n, values_a = extract_data(a_file.name)
+        n_, values_b = extract_data(b_file.name)
+        if n != n_:
+            results.append("Matrices have different dimensions")
+            return "\n\n".join(results)
+
+        values_a, ind_col_a, row_start_a = create_vectors(n, values_a)
+        values_b, ind_col_b, row_start_b = create_vectors(n, values_b)
+
+        if "Sum of Matrices" in operations:
+            values_result, ind_col_result, row_start_result = add_sparse_matrices(values_a, ind_col_a, row_start_a,
+                                                                                  values_b, ind_col_b, row_start_b, n)
+            results.append("Sum of Matrices: values={}, ind_col={}, row_start={}".format(values_result, ind_col_result,
+                                                                                         row_start_result))
+
+        if aplusb_file and "Verify Sum" in operations:
+            n__, values_ab = extract_data(aplusb_file.name)
+            if n != n__:
+                results.append("Matrices have different dimensions")
+                return "\n\n".join(results)
+
+            values_ab, ind_col_ab, row_start_ab = create_vectors(n, values_ab)
+            are_equal = compare_sparse_matrices(values_ab, ind_col_ab, row_start_ab, values_result, ind_col_result,
+                                                row_start_result)
+
+            if are_equal:
+                results.append("Matrices are equal")
+            else:
+                results.append("Matrices are not equal")
+
+        return "\n\n".join(results)
+
+    def main():
+        n, element_list = extract_data("a_1.txt")
+        print("n:", n)
+        values, ind_col, row_start = create_vectors(n, element_list)
+        # print("values:", values)
+        # print("ind_col:", ind_col)
+        # print("row_start:", row_start)
+        b = extract_b("b_1.txt")
+        # b = [6, 7, 8, 9, 1]
+        # check_diagonal(n, values, ind_col, row_start)
+        k_max = 100000
+        x = Gauss_Seidel(n, values, ind_col, row_start, b, k_max)
+        # print("x:", x)
+
+        norm_solution(n, values, ind_col, row_start, b, x)
+
+        # bounus
+        n, values_a = extract_data("a.txt")
+        n_, values_b = extract_data("b.txt")
+        if n != n_:
+            print("Matrices have different dimensions")
+            return
+
+        values_a, ind_col_a, row_start_a = create_vectors(n, values_a)
+        values_b, ind_col_b, row_start_b = create_vectors(n, values_b)
+
+        values_result, ind_col_result, row_start_result = add_sparse_matrices(values_a, ind_col_a, row_start_a,
+                                                                              values_b,
+                                                                              ind_col_b, row_start_b, n)
+
+        print("values_result:", values_result)
+        print("ind_col_result:", ind_col_result)
+        print("row_start_result:", row_start_result)
+
+        n__, values_ab = extract_data("aplusb.txt")
+        if n != n__:
+            print("Matrices have different dimensions")
+            return
+        values_ab, ind_col_ab, row_start_ab = create_vectors(n, values_ab)
+        print("values_ab:", values_ab)
+        print("ind_col_ab:", ind_col_ab)
+        print("row_start_ab:", row_start_ab)
+
+        are_equal = compare_sparse_matrices(values_ab, ind_col_ab, row_start_ab, values_result, ind_col_result,
+                                            row_start_result)
+        print("Matrices are equal:", are_equal)
+
+    # if __name__ == "__main__":
+    # main()

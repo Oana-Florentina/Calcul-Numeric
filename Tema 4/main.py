@@ -1,5 +1,6 @@
 import numpy as np
 import re
+import gradio as gr
 
 epsilon = 10 ** (-10)
 
@@ -153,18 +154,65 @@ def norm_solution(A, x, b, n):
 
     norm = max(abs(x) for x in prod)
     print("||A*x_GS||_inf:", norm)
+    result = "||A*x_GS||_inf: {}".format(norm)
     if norm < epsilon:
         print("Norm is less than epsilon, so the solution is correct")
+        result += "\nNorm is less than epsilon, so the solution is correct"
     else:
         print("Norm is greater than epsilon, so the solution is incorrect")
+        result += "\nNorm is greater than epsilon, so the solution is incorrect"
+
+    return result
 
 
 def verify_matrix_is_empty(sparse_matrix):
     for line in sparse_matrix:
         if len(line) > 0:
             print("Matrix has different elements. AB != A + B")
-            return
+            return "Matrix has different elements. AB != A + B"
+
     print("Matrix has the same elements. AB == A + B")
+    return "Matrix has the same elements. AB == A + B"
+
+
+def process_files_gauss_seidel_norm(a_file, b_file, operations):
+    print("Processing files")
+    results = []
+
+    if a_file and b_file:
+        A, n = extract_data(a_file.name)
+        x = [0 for _ in range(n)]
+        b = extract_b(b_file.name)
+        k_max = 30000
+
+        x = Gauss_Seidel(A, b, x, n, k_max)
+        n_s = norm_solution(A, x, b, n)
+
+        if "Gauss-Seidel" in operations:
+            results.append("Gauss-Seidel Solution: {}".format(x))
+
+        if "Norm" in operations:
+            results.append("Norm calculation: {}".format(n_s))
+
+    return "\n\n".join(results)
+
+
+def process_files_sum_comparison(a_file, b_file, aplusb_file, operations):
+    results = []
+
+    if a_file and b_file:
+        A_, n_ = extract_data(a_file.name)
+        AB_, n__ = extract_data(b_file.name, A_)
+
+        if "Sum of Matrices" in operations:
+            results.append("Sum of Matrices: {}".format(AB_))
+
+        if aplusb_file and "Verify Sum" in operations:
+            result, n = extract_data(aplusb_file.name, AB_, 1, -1)
+            result = verify_matrix_is_empty(result)
+            results.append("Verification Result: {}".format(result))
+
+    return "\n\n".join(results)
 
 
 def main():
@@ -197,6 +245,5 @@ def main():
     print(result)
     verify_matrix_is_empty(result)
 
-
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+# main()
