@@ -19,7 +19,7 @@ def index(i, j):
     return i * (i + 1) // 2 + j
 
 
-def calculate_p_q(A):
+def calculate_p_q_bonus(A):
     n = 3
     print("n=", n)
     p = 0
@@ -82,12 +82,12 @@ def apply_rotation(A, R, n):
     return A_new_lower_triangular
 
 
-def jacobi(A):
+def jacobi2(A):
     k = 0
     n = 3  # Calculăm dimensiunea matricei corespunzătoare vectorului A
     U = np.identity(n)
     k_max = 1000
-    p, q = calculate_p_q(A)
+    p, q = calculate_p_q_bonus(A)
     print("p=", p, "q=", q)
     print("A index: ", A[index(p, q)])
     print("index:", index(p, q))
@@ -117,7 +117,7 @@ def jacobi(A):
         print_matrix_from_vector(A, n)
         U = np.dot(U, R.T)
 
-        p, q = calculate_p_q(A)
+        p, q = calculate_p_q_bonus(A)
         print("p=", p, "q=", q)
 
         c, s, t = calculate_c_s_t(A, p, q)
@@ -148,7 +148,15 @@ def print_matrix_from_vector(v, n):
             else:
                 print(v[j * (j + 1) // 2 + i], end=" ")
         print()
-
+def return_matrix_from_vector(v, n):
+    A = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            if j <= i:
+                A[i][j] = v[i * (i + 1) // 2 + j]
+            else:
+                A[i][j] = v[j * (j + 1) // 2 + i]
+    return A
 
 def print_matrix(A):
     for i in range(len(A)):
@@ -157,7 +165,7 @@ def print_matrix(A):
         print()
 
 
-def calculate_A_final(A_init, U, n):
+def calculate_A_final_bonus(A_init, U, n):
     # Convertim vectorul A_init într-o matrice
     A_init_matrix = np.zeros((n, n))
     index = 0
@@ -215,13 +223,13 @@ def main():
     print_matrix_from_vector(A_init, n)
     print(A)
 
-    calculate_p_q(A)
-    A, U = jacobi(A)
+    calculate_p_q_bonus(A)
+    A, U = jacobi2(A)
     print("A:")
     print_matrix_from_vector(A, n)
     print("U:")
     print_matrix(U)
-    A_final = calculate_A_final(A_init, U, n)
+    A_final = calculate_A_final_bonus(A_init, U, n)
     print("A_Final:")
     print_matrix_from_vector(A_final, n)
 
