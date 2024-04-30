@@ -63,17 +63,15 @@ def calculate_norm_2(G_1, G_2):
     return G_1 ** 2 + G_2 ** 2
 
 
-def condition_learning_rate(operation_1, operation_2, learning_rate, norm, p):
-    if p >= 8:
+def condition_learning_rate(operation_1, operation_2, learning_rate, norm, p, max_p):
+    if p >= max_p:
         return False
 
     # f(x - G_1, y - G_2) > f(x, y) - learning_rate * 0.5 * calculate_norm_2(G_1, G_2)
     return operation_1 > operation_2 - learning_rate * 0.5 * norm
 
 
-
-
-def find_learning_rate_2(f, x, y, G_1, G_2):
+def find_learning_rate_2(f, x, y, G_1, G_2, max_p):
     # f(x-G_1, y-G_2)
     operation_1 = f(x - G_1, y - G_2)
     # f(x, y)
@@ -83,18 +81,18 @@ def find_learning_rate_2(f, x, y, G_1, G_2):
     learning_rate = 1
     p = 1
     beta = 0.8
-    while condition_learning_rate(operation_1, operation_2, learning_rate, norm, p):
+    while condition_learning_rate(operation_1, operation_2, learning_rate, norm, p, max_p):
         learning_rate *= beta
         p += 1
 
     return learning_rate
 
 
-def divergence_condition(k, learning_rate, G_1, G_2,k_max):
+def divergence_condition(k, learning_rate, G_1, G_2, k_max, max_product):
     norm = np.linalg.norm([G_1, G_2], ord=2)
 
     product = learning_rate * norm
-    if k > k_max or product < epsilon or product > 10 ** 10:
+    if k > k_max or product < epsilon or product > max_product:
         return product, True
     return product, False
 
@@ -105,33 +103,44 @@ def choose_values(start, end):
     return x, y
 
 
-def algorithm(f, gradient_function, x, y, l_r, max_k):
+def algorithm(f, gradient_function, x, y, l_r, max_k, max_p, type_, max_product):
+    message = ""
     k = 0
     learning_rate = 10 ** (-1)
     while True:
         G_1, G_2 = gradient_function(f, x, y)
         # print(f"{gradient_function.__name__}: ", G_1, G_2)
 
-        # learning_rate = find_learning_rate_2(f, x, y, G_1, G_2)
-        learning_rate = l_r
+        if type_ == 1:
+            learning_rate = find_learning_rate_2(f, x, y, G_1, G_2, max_p)
+        else:
+            learning_rate = l_r
+
         # print("Learning rate:", learning_rate)
 
         x -= learning_rate * G_1
         y -= learning_rate * G_2
         k += 1
 
-        product, divergence = divergence_condition(k, learning_rate, G_1, G_2,max_k)
+        product, divergence = divergence_condition(k, learning_rate, G_1, G_2, max_k, max_product)
         if divergence:
             # print("Divergence condition met")
+            message += "Number of iterations: " + str(k) + "\n"
             print("Number of iterations:", k)
             break
 
     if product <= epsilon:
+        message += "Converged\n"
+        message += "x: " + str(x) + "\n"
+        message += "y: " + str(y) + "\n"
         print("converged")
         print("x:", x)
         print("y:", y)
     else:
         print("Divergence condition met")
+        message += "Divergence condition met\n"
+
+    return message
 
 
 if __name__ == "__main__":
@@ -141,11 +150,11 @@ if __name__ == "__main__":
     max_k = 300000
     max_p = 8
     print("Approximate gradient:")
-    algorithm(function_1, approximate_gradient, x, y, learning_rate, max_k)
+    algorithm(function_1, approximate_gradient, x, y, learning_rate, max_k, max_p, 1, 10 ** 10)
     print()
 
     print("Analytic gradient:")
-    algorithm(function_4,analytic_gradient, x, y, learning_rate,max_k)
+    algorithm(function_4, analytic_gradient, x, y, learning_rate, max_k, max_p, 2, 10 ** 10)
     print()
 
-    #l_R
+    # l_R
