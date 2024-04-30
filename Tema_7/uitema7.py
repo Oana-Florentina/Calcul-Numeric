@@ -18,7 +18,6 @@ def launch_interface():
                     interactive=True
                 )
 
-                random_vector = gr.Checkbox(label="Generate Random Polynom")
 
                 n_input = gr.Number(label="Size of the polynom", value=4, precision=0, interactive=True)
 
@@ -56,20 +55,17 @@ def launch_interface():
 
                 vector_examples.change(populate_vector, inputs=[vector_examples], outputs=[vector_input])
 
-                def process_ex(random_vector, n, vector_input, bonus_checkbox, file_input):
-                    if random_vector:
-                        a = np.random.randint(-100, 100, size=(n,)).tolist()
-                    elif vector_examples.value is not None:
-                        a = vector_input.values.flatten().tolist()
-                    else:
-                        a = vector_input.values.flatten().tolist()
+                def process_ex( n, vector_input, bonus_checkbox, file_input):
+
+                    a = vector_input.values.flatten().tolist()
                     results = ""
                     R = Calculate_Roots(a, n)
+                    r = -R
                     sol = helper_function(a, n, R)
                     if file_input:
                         save_solution(sol, file_input)
                     roots = ""
-                    roots += "-" + str(R) + ", "+ str(R) + "\n"
+                    roots += str(r) + ", "+ str(R) + "\n"
 
                     results += "Sol: " + str(sol) + "\n"
                     bonuss = ""
@@ -77,7 +73,7 @@ def launch_interface():
                         bonuss += str(helper_bonus(a, R, n)) + "\n"
                     return results, roots, bonuss
 
-                btn.click(process_ex, inputs=[random_vector, n_input, vector_input, bonus_checkbox, file_input],
+                btn.click(process_ex, inputs=[ n_input, vector_input, bonus_checkbox, file_input],
                             outputs=[output_text, output_roots, output_bonus])
 
 

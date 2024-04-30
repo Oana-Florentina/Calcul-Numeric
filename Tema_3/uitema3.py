@@ -15,7 +15,7 @@ from .exercitiul import calculate_vector, generate_matrix, generate_vector_s, QR
 def launch_interface():
     with gr.Blocks() as iface:
         with gr.Tabs():
-            with gr.TabItem("LU Decomposition"):
+            with gr.TabItem("QR Decomposition"):
                 matrix_examples = gr.Dropdown(
                     label="Matrix Examples",
                     choices=["Example 1", "Example 2", "Example 3"],
