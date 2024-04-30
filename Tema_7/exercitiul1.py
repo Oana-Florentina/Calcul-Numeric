@@ -83,8 +83,8 @@ def check_solution(x_2, sol, epsilon):
     return True
 
 
-def save_solution(sol):
-    with open("solution_test.txt", "w") as file:
+def save_solution(sol, name_file):
+    with open(name_file, "w") as file:
         file.write(str(sol))
 
 
@@ -114,14 +114,7 @@ def bonus(coef, R, n):
                     P(derivata_coef, x1, n - 1) * (P(coef, x1, n) - P(coef, y, n))))
     return x2
 
-
-def main():
-    n = 5
-    a = [42.0, -55.0, -42.0, 49.0, -6.0]
-    # a = gen_pol(n)
-    print("a:", a)
-    R = Calculate_Roots(a, n)
-
+def helper_function(a, n, R):
     sol = []
     x_2 = Muller(a, n, R)
     sol.append(x_2)
@@ -131,22 +124,33 @@ def main():
         if check_solution(x_2, sol, epsilon):
             sol.append(x_2)
         i += 1
+    return sol
+def main():
+    n = 5
+    a = [42.0, -55.0, -42.0, 49.0, -6.0]
+    # a = gen_pol(n)
+    print("a:", a)
+    R = Calculate_Roots(a, n)
+    sol = helper_function(a, n, R)
+
 
     print("sol:", sol)
-    save_solution(sol)
+    save_solution(sol, "sol.txt")
     print("roots:", -R, R)
     print("---------bonussssssss-------")
+    bonus_sol = helper_bonus([1, -6, 11, -6], 12, 4)
+    print ("bonus_sol:", bonus_sol)
+
+def helper_bonus(coef, R, n):
     bonus_sol = []
 
-    print("derivata:", calculate_derivate_polinom([1, -6, 11, -6], 4))
+    print("derivata:", calculate_derivate_polinom(coef, n))
     i = 0
     while i < 3000:
-        x_2 = bonus([1, -6, 11, -6], 12, 4)
+        x_2 = bonus(coef, R, n)
         if check_solution(x_2, bonus_sol, epsilon):
             bonus_sol.append(x_2)
         i += 1
-    print("bonus sol: ", bonus_sol)
-
-
+    return bonus_sol
 if __name__ == "__main__":
     main()

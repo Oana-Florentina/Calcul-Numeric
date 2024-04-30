@@ -9,8 +9,10 @@ from Tema_3.uitema3 import app as ui3
 from Tema_4.uitema4 import app as ui4
 from Tema_5.uitema5 import app as ui5
 from Tema_6.uitema6 import app as ui6
+from Tema_7.uitema7 import app as ui7
 
-demo = gr.TabbedInterface([ui1, ui2, ui3, ui4, ui5, ui6], ["Homework 1", "Homework 2", "Homework3", "Homework 4", "Homework 5", "Homework 6"], title="CN Homeworks", theme=purple_triangle)
+demo = gr.TabbedInterface([ui1, ui2, ui3, ui4, ui5, ui6, ui7], ["Homework 1", "Homework 2", "Homework3", "Homework 4",
+                                                                "Homework 5", "Homework 6", "Homework 7"], title="CN Homeworks", theme=purple_triangle)
 
 if __name__ == "__main__":
     demo.launch()
