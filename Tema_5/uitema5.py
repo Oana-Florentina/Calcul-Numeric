@@ -4,8 +4,8 @@ import gradio as gr
 import copy
 import scipy.linalg as cholesky
 
-from .bonus import calculate_A_final_bonus, calculate_eigenvalues, return_matrix_from_vector, jacobi2, \
-    calculate_p_q_bonus, print_matrix_from_vector
+from .bonus import calculate_A_final_bonus, calculate_eigenvalues, jacobi2, \
+    calculate_p_q_bonus, print_matrix_from_vector, helper_matrix_from_vector
 from .exercitiul1 import generate_symmetric_matrix, jacobi, matrix_norm
 from .exercitiul2 import generate_positive_definite_matrix, is_positive_definite, process_this
 from .exercitiul3 import calculate_singular_values, calculate_rank, calculate_condition_number, \
@@ -271,9 +271,10 @@ def launch_interface():
                 btn = gr.Button("Submit")
 
                 with gr.Row():
-                    output_matrix1 = gr.Dataframe(label="A:")
-                    output_matrix2 = gr.Dataframe(label="U:")
-                    output_matrix3 = gr.Dataframe(label="A_final:")
+                    output_matrix1 = gr.DataFrame(label="A:")
+                    output_matrix2 = gr.DataFrame(label="U:")
+                with gr.Row():
+                    output_matrix3 = gr.DataFrame(label="A_final:")
                 with gr.Row():
                     output_text4 = gr.Textbox(label="Norma diferenței:")
 
@@ -300,17 +301,26 @@ def launch_interface():
 
                     A_init = np.copy(A)
                     calculate_p_q_bonus(A)
-                    A, U = jacobi2(A)
+                    A, U = jacobi2(A, n)
+
+                    print("jjjjjjjjj")
+                    print(U)
+                    print("AAAAAA")
+                    print(A)
                     print("resulttttttttttttttttt:")
                     print_matrix_from_vector(A, n)
-                    A_matrix = return_matrix_from_vector(A, n)
+                    A_matrix = helper_matrix_from_vector(A, n)
                     print("nouuuuuuuuuu")
-                    print(A_matrix)
-                    U_matrix = return_matrix_from_vector(U, n)
+
+
                     A_final = calculate_A_final_bonus(A_init, U, n)
-                    A_final_matrix = return_matrix_from_vector(A_final,n)
+                    A_final_matrix = helper_matrix_from_vector(A_final, n)
+                   # print_matrix_from_vector(A_final, n)
+
                     norm = calculate_eigenvalues(A_init, U, n)
-                    return pd.DataFrame(A_matrix, columns=[str(i) for i in range(n)]), pd.DataFrame(U_matrix, columns=[str(i) for i in range(n)]), pd.DataFrame(A_final_matrix, columns=[str(i) for i in range(n)]), norm
+
+                    return A_matrix, U, A_final_matrix, norm
+                  #  return pd.DataFrame(A_matrix, columns=[str(i) for i in range(n)]), pd.DataFrame(U_matrix, columns=[str(i) for i in range(n)]), pd.DataFrame(A_final_matrix, columns=[str(i) for i in range(n)]), norm
                 btn.click(process_function_bonus, inputs=[random_vector, n_input, vector_input],
 
                           outputs=[output_matrix1, output_matrix2, output_matrix3, output_text4])

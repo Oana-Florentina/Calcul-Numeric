@@ -57,34 +57,29 @@ def is_not_diagonal(A, n):
 
 
 def apply_rotation(A, R, n):
-    # Convertim vectorul A într-o matrice
     A_matrix = np.zeros((n, n))
     index = 0
     for i in range(n):
         for j in range(i + 1):
             A_matrix[i][j] = A[index]
             A_matrix[j][i] = A[index]
-
             index += 1
-    print("A_matrix=")
-    print(A_matrix)
-    # Efectuăm înmulțirea R * A_matrix * R.T
+
     A_matrix = np.dot(np.dot(R, A_matrix), R.T)
-    print("A_matrix dupa =")
-    print(A_matrix)
-    # Extragem partea inferioară a matricei A_new și o convertim înapoi într-un vector
+
     A_new_lower_triangular = []
+    index = 0  # Reset the index here
     for i in range(n):
         for j in range(i + 1):
             A_new_lower_triangular.append(A_matrix[i][j])
-    print("A_new_lower_triangular=")
-    print(A_new_lower_triangular)
+            index += 1
+
     return A_new_lower_triangular
 
 
-def jacobi2(A):
+def jacobi2(A, n):
     k = 0
-    n = 3  # Calculăm dimensiunea matricei corespunzătoare vectorului A
+      # Calculăm dimensiunea matricei corespunzătoare vectorului A
     U = np.identity(n)
     k_max = 1000
     p, q = calculate_p_q_bonus(A)
@@ -148,16 +143,18 @@ def print_matrix_from_vector(v, n):
             else:
                 print(v[j * (j + 1) // 2 + i], end=" ")
         print()
-def return_matrix_from_vector(v, n):
-    A = np.zeros((n, n))
+
+def helper_matrix_from_vector(v, n):
+    mat = np.zeros((n, n))
+
     for i in range(n):
         for j in range(n):
             if j <= i:
-                A[i][j] = v[i * (i + 1) // 2 + j]
+                mat [i][j] = v[i * (i + 1) // 2 + j]
             else:
-                A[i][j] = v[j * (j + 1) // 2 + i]
-    return A
+                mat[j][i] = v[j * (j + 1) // 2 + i ]
 
+    return mat
 def print_matrix(A):
     for i in range(len(A)):
         for j in range(len(A[i])):
@@ -224,7 +221,7 @@ def main():
     print(A)
 
     calculate_p_q_bonus(A)
-    A, U = jacobi2(A)
+    A, U = jacobi2(A, n)
     print("A:")
     print_matrix_from_vector(A, n)
     print("U:")
