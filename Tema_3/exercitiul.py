@@ -174,8 +174,8 @@ def main():
     s = [3, 2, 1]
     A = [[0, 0, 4], [1, 2, 3], [0, 1, 2]]
 
-    s = generate_vector_s(n)
-    A = generate_matrix(n)
+   # s = generate_vector_s(n)
+    #A = generate_matrix(n)
     A_bonus = generate_positive_definite_matrix(n)
     A_init = np.copy(A)
     A_init = np.array(A_init, dtype=np.float32)

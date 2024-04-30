@@ -32,7 +32,7 @@ def wrapper_approximations(func_name, a):
 bonus = gr.Interface(
     fn=wrapper_approximations,
     inputs=[
-        gr.Dropdown(choices=["sin", "cos"], label="Function"),
+        gr.Dropdown(choices=["sin_S", "cos_S"], label="Function"),
         gr.Slider(minimum=0, maximum=2*3.14159, step=0.01, label="Angle")
     ],
     outputs=gr.Textbox(label="Result")
