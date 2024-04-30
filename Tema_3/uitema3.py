@@ -67,7 +67,7 @@ def launch_interface():
                 btn = gr.Button("Submit")
 
                 with gr.Row():
-                    
+
                     output_vector = gr.Dataframe(label="Processed Vector")
 
                 with gr.Row():
