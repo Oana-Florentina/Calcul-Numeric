@@ -131,7 +131,6 @@ def is_positive_definite(A):
 def bonus(A):
     k = 0
     Q, R = np.linalg.qr(A)
-
     k_max = 10000
     try:
         if not is_positive_definite(A):
@@ -145,8 +144,6 @@ def bonus(A):
             prev = A
             Q, R = np.linalg.qr(A)
             A = R @ Q
-
-
         return A
     except np.linalg.LinAlgError as e:
         print("A apărut o eroare în timpul calculului:", e)

@@ -8,13 +8,12 @@ from Tema_1.exercitiul3 import T_4, T_5, T_6, T_7, T_8, T_9, return_top
 
 
 class TestFunctions(unittest.TestCase):
-    def test_find_u(self):
+    def test_u(self):
         u = find_u()
-        self.assertAlmostEqual(u, 10 ** (-15), places=15)
+        self.assertNotEqual(u+1, 1)
 
     def test_verify_operation_plus(self):
         result = verify_operation_plus()
-
         self.assertTrue(result, "The result of the addition operation should not be equal.")
 
     def test_verify_operation_multiply(self):

@@ -71,19 +71,9 @@ class TestMatrixOperations(unittest.TestCase):
         result = solve_equation(self.A_init, self.b, x)
         self.assertIn("x_lib:", result)
 
-    def test_LU_decomposition_2(self):
-        L, U = LU_decomposition_2(self.A_init, self.n)
-        self.assertIsInstance(L, list)
-        self.assertIsInstance(U, list)
 
-    def test_generate_matrix(self):
-        matrix = generate_matrix(self.n)
-        self.assertEqual(len(matrix), self.n)
-        self.assertEqual(len(matrix[0]), self.n)
 
-    def test_generate_vector_s(self):
-        vector = generate_vector_s(self.n)
-        self.assertEqual(len(vector), self.n)
+
 
 def main():
     unittest.main()

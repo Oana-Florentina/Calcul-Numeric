@@ -131,7 +131,7 @@ def main():
     eigenvalues = np.diag(A)
 
     # Verificarea A_init * U ≈ U * Λ prin calcularea normei matriceale a diferenței
-    norm_difference = matrix_norm(np.dot(A_init, U) - np.dot(U, np.diag(eigenvalues)))
+    norm_difference = matrix_norm(np.dot(A_init, U) - np.dot(U, eigenvalues))
     print("Norma matriceală a diferenței între A_init * U și U * Λ:", norm_difference)
 
 
