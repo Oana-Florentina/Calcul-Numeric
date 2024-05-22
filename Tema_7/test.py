@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
             result = P(coef, root, n)
             self.assertTrue(result < epsilon, "The result is not as expected.")
 
-    
+
 
 if __name__ == '__main__':
     unittest.main()
