@@ -15,12 +15,20 @@ def function_1_analytic_gradient(x, y):
     return 2 * x - 2, 2 * y - 4
 
 
+def function_1_hessian_gradient_analytic(f, x, y):
+    return 2, 0, 0, 2
+
+
 def function_2(x, y):
     return 3 * x ** 2 - 12 * x + 2 * y ** 2 + 16 * y - 10
 
 
 def function_2_analytic_gradient(x, y):
     return 6 * x - 12, 4 * y + 16
+
+
+def function_2_hessian_gradient_analytic(f, x, y):
+    return 6, 0, 0, 4
 
 
 def function_3(x, y):
@@ -31,6 +39,10 @@ def function_3_analytic_gradient(x, y):
     return 2 * x - 4 * y, (-4) * x + 10 * y - 4
 
 
+def function_3_hessian_gradient_analytic(f, x, y):
+    return 2, -4, -4, 10
+
+
 def function_4(x, y):
     return x * y ** 2 - 2 * x * y ** 2 + 3 * x * y + 4
 
@@ -39,14 +51,27 @@ def function_4_analytic_gradient(x, y):
     return 2 * x * y - 2 * y ** 2 + 3 * y, x ** 2 - 4 * x * y + 3 * x
 
 
+def function_4_hessian_gradient_analytic(f, x, y):
+    return 2 * y, 2 * x - 4 * y + 3, 2 * x - 4 * y + 3, -4 * x
+
+
 analytic_gradient_dictionary = {function_1: function_1_analytic_gradient,
                                 function_2: function_2_analytic_gradient,
                                 function_3: function_3_analytic_gradient,
                                 function_4: function_4_analytic_gradient}
 
+hessian_gradient_analytic_dictionary = {function_1: function_1_hessian_gradient_analytic,
+                                        function_2: function_2_hessian_gradient_analytic,
+                                        function_3: function_3_hessian_gradient_analytic,
+                                        function_4: function_4_hessian_gradient_analytic}
+
 
 def analytic_gradient(f, x, y):
     return analytic_gradient_dictionary[f](x, y)
+
+
+def hessian_gradient_analytic(f, x, y):
+    return hessian_gradient_analytic_dictionary[f](f, x, y)
 
 
 def approximate_gradient(f, x, y):
@@ -57,6 +82,21 @@ def approximate_gradient(f, x, y):
     G_2 /= 2 * h
 
     return G_1, G_2
+
+
+def hessian_gradient(f, x, y):
+    G_1, G_2 = approximate_gradient(f, x, y)
+    G1_xmh, G2_xmh = approximate_gradient(f, x - h, y)
+    G1_ymh, G2_ymh = approximate_gradient(f, x, y - h)
+    G1_xm2h, G2_xm2h = approximate_gradient(f, x - 2 * h, y)
+    G1_ym2h, G2_ym2h = approximate_gradient(f, x, y - 2 * h)
+
+    H_11 = (3 * G_1 - 4 * G1_xmh + G1_xm2h) / (2 * h)
+    H_12 = (3 * G_1 - 4 * G1_ymh + G1_ym2h) / (2 * h)
+    H_21 = (3 * G_2 - 4 * G2_xmh + G2_xm2h) / (2 * h)
+    H_22 = (3 * G_2 - 4 * G2_ymh + G2_ym2h) / (2 * h)
+
+    return H_11, H_12, H_21, H_22
 
 
 def calculate_norm_2(G_1, G_2):
@@ -103,12 +143,18 @@ def choose_values(start, end):
     return x, y
 
 
-def algorithm(f, gradient_function, x, y, l_r, max_k, max_p, type_, max_product):
+def algorithm(f, gradient_function, x, y, l_r, max_k, max_p, type_, max_product, use_hessian=False, hessian_grad=None):
     message = ""
     k = 0
-    learning_rate = 10 ** (-1)
     while True:
-        G_1, G_2 = gradient_function(f, x, y)
+        if not use_hessian:
+            G_1, G_2 = gradient_function(f, x, y)
+        else:
+            hessian = np.array(hessian_grad(f, x, y)).reshape(2, 2)
+            # print(hessian)
+            hessian_inverse = np.linalg.inv(hessian)
+            G_1, G_2 = hessian_inverse @ gradient_function(f, x, y)
+
         # print(f"{gradient_function.__name__}: ", G_1, G_2)
 
         if type_ == 1:
@@ -150,11 +196,20 @@ if __name__ == "__main__":
     max_k = 300000
     max_p = 8
     print("Approximate gradient:")
-    algorithm(function_1, approximate_gradient, x, y, learning_rate, max_k, max_p, 1, 10 ** 10)
+    algorithm(function_2, approximate_gradient, x, y, learning_rate, max_k, max_p, 1, 10 ** 10)
     print()
 
     print("Analytic gradient:")
-    algorithm(function_4, analytic_gradient, x, y, learning_rate, max_k, max_p, 2, 10 ** 10)
+    algorithm(function_2, analytic_gradient, x, y, learning_rate, max_k, max_p, 2, 10 ** 10)
     print()
 
+    learning_rate = 1
+
+    print("Hessian approximate gradient:")
+    algorithm(function_2, approximate_gradient, x, y, learning_rate, max_k, max_p, 1, 10 ** 10, True, hessian_gradient)
+    print()
+
+    print("Hessian analytic gradient:")
+    algorithm(function_2, analytic_gradient, x, y, learning_rate, max_k, max_p, 2, 10 ** 10, True,
+              hessian_gradient_analytic)
     # l_R

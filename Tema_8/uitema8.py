@@ -15,8 +15,6 @@ import random
 import numpy as np
 
 
-# Funcțiile și dicționarul analytic_gradient_dictionary rămân la fel
-
 def run_algorithm(function, gradient_type, x_min, x_max, y_min, y_max, learning_rate, max_k, max_p, max_product,
                   learning_rate_checkbox):
     x, y = random.uniform(x_min, x_max), random.uniform(y_min, y_max)

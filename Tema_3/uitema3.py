@@ -6,7 +6,6 @@ import copy
 import random
 import math
 
-# Import functions from the provided file
 from .exercitiul import calculate_vector, generate_matrix, generate_vector_s, QR, bonus, calculate_norm, solve_system, \
     inverse_with_qr, find_x_qr_with_lib, calculate_second_norm, calculate_third_norm, calculate_svd, \
     generate_positive_definite_matrix
